@@ -1,0 +1,107 @@
+<div class="h-screen bg-[#f8f5f0] relative overflow-hidden" data-controller="parallax">
+  
+  
+  <%= render 'parralax_bg' %>
+  
+  <div class="absolute inset-0 flex flex-col items-center justify-center px-8">
+    <div class="max-w-5xl mx-auto text-center opacity-0 translate-y-5 transition-all duration-1000" data-parallax-target="text">
+      <h1 class="text-[100px] md:text-[120px] leading-none font-light mb-0 font-austin">
+        ROOM 13
+      </h1>
+      <p class="mt-2 text-gray-600 text-sm tracking-[0.3em] uppercase font-montserrat">
+        A global art world members club
+      </p>
+
+      <p class="mt-6 text-gray-600 text-sm tracking-[0.3em] uppercase font-montserrat underline">
+        <a href="#about">Equire Now</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Black section for testing parallax effect -->
+<div class="h-screen bg-black relative">
+  <div class="flex items-center justify-center h-full">
+    
+    <div class="my-24 text-gray-400 max-w-2xl mx-auto">
+      <h2 class="text-4xl text-center md:text-8xl font-light mb-8 font-austin"
+          data-controller="typewriter"
+          data-typewriter-text-value="AUT DELECTARE AUT PRODESSE"
+          data-typewriter-speed-value="60"
+          data-typewriter-delay-value="300">
+      </h2>
+    </div>
+
+  </div>
+</div>
+
+<!-- Events Section -->
+<section class="py-20 bg-[#f8f5f0]">
+  <div class="max-w-6xl mx-auto px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-light mb-4 font-austin text-gray-900">
+        UPCOMING EVENTS
+      </h2>
+      <p class="text-gray-600 text-sm tracking-[0.2em] uppercase font-montserrat max-w-2xl mx-auto">
+        Join us in London (Frieze & Frieze Masters) and Paris (Art Basel) for an extraordinary experience.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- London Event Card -->
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <div class="aspect-[4/3] relative overflow-hidden">
+          <%= image_tag "events/london.png", class: "w-full h-full object-cover hover:scale-105 transition-transform duration-300" %>
+        </div>
+        <div class="p-8">
+          <div class="text-center">
+            <h3 class="text-3xl font-light mb-2 font-austin text-gray-900">LONDON</h3>
+            <div class="w-16 h-px bg-gray-300 mx-auto mb-4"></div>
+            <p class="text-gray-600 text-sm tracking-[0.2em] uppercase font-montserrat mb-2">Private Georgian Manor</p>
+            <p class="text-gray-500 text-sm mb-4 max-w-sm mx-auto py-2">
+              Experience an unforgettable evening of art, culture, and connection in the heart of London.
+            </p>
+            <a href="#" class="inline-block bg-black text-white px-8 py-3 text-sm tracking-[0.2em] uppercase font-montserrat hover:bg-gray-800 transition-colors duration-300">
+              Register Interest
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paris Event Card -->
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <div class="aspect-[4/3] relative overflow-hidden">
+          <%= image_tag "events/paris.png", class: "w-full h-full object-cover hover:scale-105 transition-transform duration-300" %>
+        </div>
+        <div class="p-8">
+          <div class="text-center">
+            <h3 class="text-3xl font-light mb-2 font-austin text-gray-900">PARIS</h3>
+            <div class="w-16 h-px bg-gray-300 mx-auto mb-4"></div>
+            <p class="text-gray-600 text-sm tracking-[0.2em] uppercase font-montserrat mb-2">Vintage glass factory</p>
+            <p class="text-gray-500 text-sm mb-4 max-w-sm mx-auto py-2">Experience an unforgettable evening of art, culture, and connection in the heart of Paris.</p>
+            <a href="#" class="inline-block bg-black text-white px-8 py-3 text-sm tracking-[0.2em] uppercase font-montserrat hover:bg-gray-800 transition-colors duration-300">
+              Register Interest
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Membership CTA Section -->
+<section class="py-20 bg-black">
+  <div class="max-w-4xl mx-auto px-8 text-center">
+    <h2 class="text-4xl md:text-6xl font-light mb-8 font-austin text-white">
+      MEMBERSHIP
+    </h2>
+    <div class="w-24 h-px bg-gray-400 mx-auto mb-8"></div>
+    <p class="text-xl text-gray-400 mb-8 max-w-2xl mx-auto font-montserrat font-light">
+      Membership options are released every quarter. <br> Enquire now to join the waitlist for the next opening in <span class="font-bold text-gray-300">October 2025</span>.
+    </p>
+    <a href="mailto:info@room13.com" class="inline-block bg-white text-black px-12 py-4 text-sm tracking-[0.3em] uppercase font-montserrat hover:bg-gray-200 transition-colors duration-300">
+      ENQUIRE NOW
+    </a>
+  </div>
+</section>
+

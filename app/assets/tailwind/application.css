@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+
+@font-face {
+  font-family: 'Austin';
+  src: url('https://booksvp.s3.eu-west-2.amazonaws.com/fonts/Austin-Medium-Trial-BF662b0bb2e5663.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.font-austin {
+  font-family: 'Austin', serif;
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', serif;
+}
+
+/* Smooth transitions for scroll animations */
+[data-controller="on-scroll"] {
+  transition: opacity 0.6s ease-in-out;
+}
