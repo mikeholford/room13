@@ -18,8 +18,3 @@
 .font-montserrat {
   font-family: 'Montserrat', serif;
 }
-
-/* Smooth transitions for scroll animations */
-[data-controller="on-scroll"] {
-  transition: opacity 0.6s ease-in-out;
-}
