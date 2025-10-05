@@ -1,18 +1,31 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Room 13" %></title>
+    <%= display_meta_tags site: 'Room 13',
+                         title: 'A global art world members club',
+                         reverse: true,
+                         separator: '–',
+                         description: 'Room 13 is a global art world members club. Join us for extraordinary events, meaningful connections, and a really bloody good party.',
+                         keywords: 'art, members club, events, gallery, art world',
+                         canonical: request.original_url,
+                         og: {
+                           title: :title,
+                           type: 'website',
+                           url: request.original_url,
+                           image: image_url('shared/og-image.jpg'),
+                           description: :description,
+                           site_name: 'Room 13'
+                         },
+                         twitter: {
+                           card: 'summary_large_image',
+                           site: '@room13art',
+                           title: :title,
+                           description: :description,
+                           image: image_url('shared/og-image.jpg')
+                         } %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-
-    <meta property="og:title" content="Room 13 – A global art world members club" />
-    <meta property="og:site_name" content="Room 13" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="<%= request.original_url %>" />
-    <meta property="og:image" itemprop="image" content="<%= image_url('shared/og-image.jpg') %>" />
-    <meta property="og:image:alt" content="Room 13 Website" />
-    <meta property="og:description" content="Room 13 is a global art world members club. Join us for extraordinary events, meaningful connections, and a really bloody good party." />
 
     <!-- 100% privacy-first analytics -->
     <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>

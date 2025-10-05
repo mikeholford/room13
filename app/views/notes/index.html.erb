@@ -1,6 +1,21 @@
 <%
   require 'ostruct'
 
+  # Set meta tags for this page
+  set_meta_tags title: "Missed Connections – #{@event.name}",
+                description: "Did you share a moment with someone at #{@event.name}? Leave your note here—perhaps they'll find it. A fleeting conversation, an exchange of glances, or a connection cut short.",
+                keywords: "missed connections, #{@event.name}, art event, room 13, connections",
+                og: {
+                  title: "Missed Connections – #{@event.name}",
+                  description: "Did you share a moment with someone at #{@event.name}? Leave your note here—perhaps they'll find it.",
+                  image: image_url('shared/missed-connections.png')
+                },
+                twitter: {
+                  title: "Missed Connections – #{@event.name}",
+                  description: "Did you share a moment with someone at #{@event.name}? Leave your note here—perhaps they'll find it.",
+                  image: image_url('shared/missed-connections.png')
+                }
+
   # Load sample notes from YAML and create note-like objects
   sample_notes_file = Rails.root.join('db', 'sample_notes.yml')
   sample_notes = []
