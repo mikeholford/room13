@@ -1,0 +1,60 @@
+sample_notes:
+  - title: "TO THE ARTIST BY THE BAR"
+    body: "You were sketching in a leather journal, wearing a navy blazer. We spoke about Rothko for what felt like hours. I had to leave early for a flight. Would love to continue our conversation over coffee. Meet me at the gallery?"
+    category: "BY THE BAR"
+
+  - title: "BEAUTIFUL STRANGER IN THE RED DRESS"
+    body: "You caught my eye across the room during the auction preview. Dark hair, red dress, carrying a catalog. We exchanged glances but I lost you in the crowd. Hoping to find you again."
+    category: "FLEETING GLANCE"
+
+  - title: "THE PHOTOGRAPHER FROM PARIS"
+    body: "We talked about Cartier-Bresson on the terrace. You mentioned shooting film exclusively. I forgot to ask for your number. Would love to see your work."
+    category: "ART CHATS"
+
+  - title: "MYSTERY DANCER"
+    body: "You requested that old jazz record and we danced until midnight. I never caught your name. Hoping our paths cross again soon."
+    category: "DANCE FLOOR"
+
+  - title: "TO THE CURATOR IN SPECTACLES"
+    body: "We debated contemporary versus classical in the corner near the Hockney print. You made me laugh with your theory about museum cafeterias. Coffee sometime?"
+    category: "GREAT JOKE"
+
+  - title: "BLONDE AT THE CHAMPAGNE TABLE"
+    body: "You spilled champagne on my shoe and we couldn't stop laughing. You mentioned you collect vintage cameras. I'd love to hear more about your collection."
+    category: "GREAT JOKE"
+
+  - title: "THE WRITER WHO QUOTED WILDE"
+    body: "We shared a cigarette outside and you recited The Picture of Dorian Gray from memory. I was the one in the velvet jacket. Let's meet for drinks."
+    category: "DEEP TALK"
+
+  - title: "TO THE GALLERIST FROM BERLIN"
+    body: "You told me about your space in Kreuzberg. We talked about opening an exhibition in London. I lost your card. Please reach out."
+    category: "LOST NUMBER"
+
+  - title: "BRUNETTE IN THE GARDEN"
+    body: "You were admiring the sculptures in the courtyard. We discussed Brancusi and modern forms. I had to take a call and when I returned you had gone. Would love to continue our conversation."
+    category: "ART CHATS"
+
+  - title: "THE COLLECTOR WITH THE VINTAGE WATCH"
+    body: "You showed me your Patek Philippe and we bonded over our love of craftsmanship. I'm the one who mentioned the watchmaker in Geneva. Let's meet again."
+    category: "THOUGHTFUL EXCHANGE"
+
+  - title: "TALL STRANGER IN TWEED"
+    body: "You recommended that whisky and we ended up talking about Scottish landscapes until closing time. I never got your name but I'd love another dram with you."
+    category: "BY THE BAR"
+
+  - title: "THE PIANIST'S COMPANION"
+    body: "You were with the musician who played after dinner. We spoke briefly about Chopin and you mentioned studying in Vienna. Would love to hear you play sometime."
+    category: "ART CHATS"
+
+  - title: "MYSTERIOUS FIGURE IN BLACK"
+    body: "You stood by the window all evening, watching the city lights. We shared a moment when our eyes met. Something tells me we should meet again."
+    category: "FLEETING GLANCE"
+
+  - title: "TO THE BIBLIOPHILE"
+    body: "You mentioned your first edition Hemingway collection. We discussed our favorite bookshops in the city. I'd love to see your library one day. Coffee and books?"
+    category: "DEEP TALK"
+
+  - title: "THE ONE WHO LEFT EARLY"
+    body: "We were deep in conversation about traveling through Italy when you got an urgent call and had to leave. You promised to tell me about Tuscany. I'm still waiting to hear the story."
+    category: "LOVE INTEREST"

@@ -12,6 +12,10 @@ Rails.application.routes.draw do
   match "/about" => "statics#about", via: :all, as: :about
   match "/login" => "statics#login", via: :all, as: :login
 
+  # Event notes (Missed Connections)
+  get "/:event_slug/notes" => "notes#index", as: :event_notes
+  post "/:event_slug/notes" => "notes#create"
+
   # Defines the root path route ("/")
   root "statics#index"
 end

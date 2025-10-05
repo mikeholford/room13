@@ -1,0 +1,281 @@
+<%
+  require 'ostruct'
+
+  # Load sample notes from YAML and create note-like objects
+  sample_notes_file = Rails.root.join('db', 'sample_notes.yml')
+  sample_notes = []
+
+  if File.exist?(sample_notes_file)
+    sample_data = YAML.load_file(sample_notes_file)
+    sample_notes = sample_data['sample_notes'].map do |note_data|
+      # Create a struct that acts like a Note model
+      OpenStruct.new(
+        title: note_data['title'],
+        body: note_data['body'],
+        category: note_data['category'],
+        created_at: Time.current - rand(1..30).days,
+        sample: true
+      )
+    end
+  end
+
+  # Order real notes by most recent first, then add sample notes
+  all_notes = @notes.to_a.sort_by(&:created_at).reverse + sample_notes
+
+  # Shuffle available mood images to avoid repetition
+  available_moods = [1, 2, 3, 7, 8, 10, 11, 12, 13, 14, 15].shuffle
+  mood_index = 0
+%>
+
+<%= stylesheet_link_tag "notes" %>
+
+<div class="min-h-screen aged-paper vintage-texture py-12 px-4" data-controller="modal expander">
+
+  <!-- Newspaper Masthead -->
+  <div class="max-w-6xl mx-auto text-center mb-12 px-4">
+    <div class="vintage-divider mb-4"></div>
+    <h1 class="text-4xl md:text-5xl lg:text-6xl font-light font-austin text-[#1a1a1a] uppercase tracking-[0.15em] mb-3" style="line-height: 0.95;">
+      Missed Connections
+    </h1>
+    <p class="text-base md:text-lg font-montserrat tracking-[0.4em] uppercase text-[#2b2b2b] font-medium mb-4">
+      <%= @event.name %>
+    </p>
+    <div class="vintage-divider mb-6"></div>
+
+    <!-- Explanatory Text - LARGER -->
+    <div class="max-w-2xl mx-auto">
+      <p class="font-austin text-base md:text-lg lg:text-xl leading-relaxed text-[#5a5a5a] italic mb-2">
+        Did you share a moment with someone at this event? A fleeting conversation, an exchange of glances, or a connection cut short? Leave your note here—perhaps they'll find it.
+      </p>
+    </div>
+  </div>
+
+  <!-- Notes Display - Newspaper Clippings with "Place Your Note" in grid -->
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+
+      <!-- "Place Your Note" Card - First in Grid -->
+      <div class="break-inside-avoid" style="transform: rotate(-0.5deg);">
+        <div
+          class="torn-edge note-clipping border-2 border-dashed border-[#8b7355] p-6 shadow-[2px_2px_4px_rgba(0,0,0,0.15),_4px_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[3px_3px_6px_rgba(0,0,0,0.2),_6px_6px_16px_rgba(0,0,0,0.15)] transition-all duration-300 cursor-pointer transform hover:scale-[1.05]"
+          data-action="click->modal#open"
+        >
+          <div class="text-center opacity-60 hover:opacity-100 transition-opacity duration-300 py-4">
+            <!-- Fountain pen icon -->
+            <%= image_tag "icons/fountain.svg", class: "w-10 h-10 mx-auto mb-4", style: "filter: invert(48%) sepia(10%) saturate(1000%) hue-rotate(350deg) brightness(85%) contrast(85%);" %>
+            <h2 class="text-lg md:text-xl font-austin text-[#2b2b2b] uppercase tracking-wider mb-2 font-bold">
+              Leave a Note
+            </h2>
+            <p class="text-xs font-montserrat text-[#5a5a5a] tracking-wide">
+              Click to write a connection
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Display Notes and Polaroid Photos -->
+      <% if all_notes.any? %>
+        <%
+          note_count = 0
+          next_photo = rand(2..6) # Random number between 2-6 for first photo
+        %>
+        <% all_notes.each_with_index do |note, index| %>
+          <%
+            rotation = [-1.8, -1.2, -0.5, 0, 0.5, 1.2, 1.8][index % 7]
+            note_count += 1
+            # Use category from YAML for sample notes, "CLASSIFIED" for user notes
+            category = note.respond_to?(:category) && note.category ? note.category : "CLASSIFIED"
+          %>
+
+          <!-- Note Card -->
+          <div class="break-inside-avoid" style="transform: rotate(<%= rotation %>deg);">
+            <div
+              class="note-card torn-edge note-clipping border border-[#d4c5a9] p-6 shadow-[2px_2px_6px_rgba(0,0,0,0.2),_4px_4px_16px_rgba(0,0,0,0.12)] hover:shadow-[3px_3px_8px_rgba(0,0,0,0.25),_6px_6px_20px_rgba(0,0,0,0.15)]"
+              style="--rotation: <%= rotation %>deg;"
+              data-action="click->expander#open"
+              data-expander-type="note"
+              data-expander-title="<%= note.title.gsub('"', '&quot;') %>"
+              data-expander-body="<%= note.body.gsub('"', '&quot;').gsub("\n", '<br>') %>"
+              data-expander-date="<%= note.created_at.strftime("%B %d, %Y") %>"
+              data-expander-category="<%= category %>"
+            >
+
+              <!-- Category badge -->
+              <div class="flex justify-between items-start mb-3 pb-2 border-b border-[#d4c5a9]">
+                <span class="text-[10px] font-montserrat uppercase tracking-[0.25em] text-[#5a5a5a] bg-[#f5f1e8] px-2 py-1 border border-[#d4c5a9]">
+                  <%= category %>
+                </span>
+                <span class="text-[10px] font-montserrat uppercase tracking-wider text-[#8b7355] font-medium">
+                  № <%= all_notes.count - index %>
+                </span>
+              </div>
+
+              <!-- Title in all caps, newspaper style - LARGER -->
+              <h3 class="font-austin text-lg md:text-xl lg:text-2xl font-bold title-uppercase mb-4 leading-tight text-[#1a1a1a] tracking-wide">
+                <%= note.title %>
+              </h3>
+
+              <!-- Body text - truncated -->
+              <p class="font-austin text-base md:text-lg leading-[1.6] text-[#2b2b2b] whitespace-pre-wrap" style="text-align: justify; text-justify: inter-word; hyphens: auto;">
+                <%= note.body.length > 250 ? note.body[0..250] + "..." : note.body %>
+              </p>
+
+              <!-- Timestamp and decorative element -->
+              <div class="mt-4 pt-3 border-t border-[#d4c5a9] flex justify-between items-center">
+                <span class="font-montserrat text-[11px] uppercase tracking-[0.15em] text-[#5a5a5a]">
+                  <%= note.created_at.strftime("%b %d, %Y") %>
+                </span>
+                <span class="text-[#d4c5a9]">✦</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Insert Vintage Polaroid Photo randomly between 2-6 notes -->
+          <% if note_count >= next_photo %>
+            <%
+              photo_rotation = [-2, -1, 1, 2][index % 4]
+              note_count = 0
+              next_photo = rand(2..6) # Set next random interval
+              caption = ["A moment captured", "The night we met", "Can't forget this", "Lost but not forgotten", "Where are you now?"][index % 5]
+              # Use next image from shuffled array, cycle through if we run out
+              mood_image = "landing/mood-#{available_moods[mood_index % available_moods.length]}.jpg"
+              mood_index += 1
+            %>
+            <div class="break-inside-avoid" style="transform: rotate(<%= photo_rotation %>deg);">
+              <div
+                class="torn-edge polaroid-card shadow-[2px_2px_6px_rgba(0,0,0,0.2),_4px_4px_16px_rgba(0,0,0,0.12)] hover:shadow-[3px_3px_8px_rgba(0,0,0,0.25),_6px_6px_20px_rgba(0,0,0,0.15)]"
+                style="--rotation: <%= photo_rotation %>deg;"
+                data-action="click->expander#open"
+                data-expander-type="photo"
+                data-expander-caption="<%= caption %>"
+                data-expander-image="<%= asset_path(mood_image) %>"
+              >
+
+                <!-- Random mood photo with vintage effect -->
+                <div class="aspect-square border border-[#d4c5a9] overflow-hidden">
+                  <%= image_tag mood_image, class: "w-full h-full object-cover vintage-photo" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      <% else %>
+        <div class="col-span-full text-center py-8">
+          <div class="torn-edge note-clipping max-w-md mx-auto p-8 border border-[#d4c5a9] shadow-[2px_2px_6px_rgba(0,0,0,0.2),_4px_4px_16px_rgba(0,0,0,0.12)]">
+            <p class="font-austin text-xl text-[#5a5a5a] italic">
+              No connections posted yet.
+            </p>
+            <p class="font-montserrat text-xs uppercase tracking-wide text-[#8b7355] mt-2">
+              Be the first to share
+            </p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Expander Modal -->
+  <div
+    class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-all duration-300 p-4"
+    data-expander-target="modal"
+    data-action="click->expander#close"
+  >
+    <div
+      class="max-w-3xl w-full"
+      data-expander-target="content"
+      data-action="click->expander#close"
+    >
+      <!-- Content will be injected here by the controller -->
+    </div>
+  </div>
+
+  <!-- Modal for Note Submission -->
+  <div
+    class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-all duration-300 p-4"
+    data-modal-target="modal"
+  >
+    <div
+      class="aged-paper vintage-texture rounded-sm shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300 border-4 border-[#2b2b2b]"
+      data-modal-target="content"
+    >
+      <!-- Modal Header -->
+      <div class="px-6 md:px-8 py-6 border-b-2 border-[#2b2b2b] bg-[#ebe5d9]">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="text-2xl md:text-3xl font-light font-austin text-[#1a1a1a] tracking-wider uppercase">Leave a Note</h2>
+            <p class="text-xs font-montserrat uppercase tracking-[0.3em] text-[#5a5a5a] mt-1">Classified Submission</p>
+          </div>
+          <button
+            data-action="click->modal#close"
+            class="text-[#2b2b2b] hover:text-black transition-colors duration-200 p-2"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body - Form -->
+      <div class="px-6 md:px-8 py-8">
+        <%= form_with model: @note, url: event_notes_path(@event.slug), class: "space-y-6" do |f| %>
+          <% if @note.errors.any? %>
+            <div class="bg-[#f5e6e6] border-2 border-[#8b4545] p-4 torn-edge">
+              <p class="font-montserrat text-xs text-[#5a2222] uppercase tracking-wide mb-2 font-bold">
+                <%= pluralize(@note.errors.count, "error") %> prohibited this note from being saved:
+              </p>
+              <ul class="list-disc list-inside text-xs text-[#5a2222] font-austin">
+                <% @note.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div>
+            <label class="block font-montserrat text-xs uppercase tracking-[0.2em] mb-2 text-[#2b2b2b] font-medium">
+              Title
+            </label>
+            <%= f.text_field :title,
+              class: "w-full border-2 border-[#2b2b2b] px-4 py-3 font-austin text-base title-uppercase focus:outline-none focus:border-black bg-[#fffcf4] text-[#1a1a1a]",
+              placeholder: "TO THE PERSON IN THE RED DRESS..."
+            %>
+            <p class="text-[10px] font-montserrat text-[#5a5a5a] mt-1 tracking-wide">Titles are automatically set to uppercase</p>
+          </div>
+
+          <div>
+            <label class="block font-montserrat text-xs uppercase tracking-[0.2em] mb-2 text-[#2b2b2b] font-medium">
+              Your Message
+            </label>
+            <%= f.text_area :body,
+              rows: 8,
+              class: "w-full border-2 border-[#2b2b2b] px-4 py-3 font-austin text-base md:text-lg leading-relaxed focus:outline-none focus:border-black resize-none bg-[#fffcf4] text-[#1a1a1a]",
+              placeholder: "Write your missed connection here..."
+            %>
+            <p class="text-[10px] font-montserrat text-[#5a5a5a] mt-1 tracking-wide">Keep it brief and heartfelt, like a classic classified ad</p>
+          </div>
+
+          <div class="flex gap-3 pt-4 border-t border-[#d4c5a9]">
+            <%= f.submit "Post Note",
+              class: "flex-1 bg-[#1a1a1a] text-[#fffcf4] px-8 py-3 text-xs tracking-[0.3em] uppercase font-montserrat hover:bg-black transition-colors duration-300 cursor-pointer border-2 border-[#1a1a1a] hover:border-black"
+            %>
+            <button
+              type="button"
+              data-action="click->modal#close"
+              class="px-8 py-3 text-xs tracking-[0.3em] uppercase font-montserrat bg-transparent border-2 border-[#2b2b2b] text-[#2b2b2b] hover:bg-[#2b2b2b] hover:text-[#fffcf4] transition-colors duration-300"
+            >
+              Cancel
+            </button>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 md:px-8 py-4 border-t border-[#d4c5a9] bg-[#ebe5d9]">
+        <p class="text-[10px] font-montserrat text-center text-[#5a5a5a] tracking-wide italic">
+          All submissions are public and permanent. Please be respectful.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
