@@ -53,24 +53,16 @@ test:
 production:
   primary:
     <<: *default
-    database: room13_production
-    username: room13
-    password: <%= ENV["ROOM13_DATABASE_PASSWORD"] %>
+    url: <%= ENV["DATABASE_URL"] %>
   cache:
     <<: *default
-    database: room13_production_cache
-    username: room13
-    password: <%= ENV["ROOM13_DATABASE_PASSWORD"] %>
+    url: <%= ENV["DATABASE_URL"]&.sub("?", "_cache?") %>
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
-    database: room13_production_queue
-    username: room13
-    password: <%= ENV["ROOM13_DATABASE_PASSWORD"] %>
+    url: <%= ENV["DATABASE_URL"]&.sub("?", "_queue?") %>
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    database: room13_production_cable
-    username: room13
-    password: <%= ENV["ROOM13_DATABASE_PASSWORD"] %>
+    url: <%= ENV["DATABASE_URL"]&.sub("?", "_cable?") %>
     migrations_paths: db/cable_migrate
