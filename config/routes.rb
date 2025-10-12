@@ -13,8 +13,9 @@ Rails.application.routes.draw do
   match "/login" => "statics#login", via: :all, as: :login
 
   # Event notes (Missed Connections)
-  get "/:event_slug/notes" => "notes#index", as: :event_notes
-  post "/:event_slug/notes" => "notes#create"
+  get "/:event_slug/" => "notes#index", as: :event_notes
+  post "/:event_slug/" => "notes#create"
+  post "/:event_slug/verify_passcode" => "notes#verify_passcode", as: :verify_passcode
 
   # Defines the root path route ("/")
   root "statics#index"

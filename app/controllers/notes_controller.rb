@@ -1,9 +1,22 @@
 class NotesController < ApplicationController
   before_action :load_event
+  before_action :check_authentication, only: [:index]
 
   def index
     @notes = @event.notes
     @note = Note.new
+    @authenticated = session[:authenticated] == true
+  end
+
+  def verify_passcode
+    passcode = Rails.application.credentials.event_codes[params[:event_slug]].to_s
+    if params[:passcode] == passcode
+      session[:authenticated] = true
+      session[:authenticated_at] = Time.current
+      render json: { success: true }
+    else
+      render json: { success: false, error: "Incorrect passcode" }, status: :unprocessable_entity
+    end
   end
 
   def create
@@ -23,6 +36,10 @@ class NotesController < ApplicationController
     @event = Event.find_by!(slug: params[:event_slug])
   rescue ActiveRecord::RecordNotFound
     redirect_to root_path, alert: "Event not found"
+  end
+
+  def check_authentication
+    @authenticated = session[:authenticated] == true
   end
 
   def note_params

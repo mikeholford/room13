@@ -22,7 +22,7 @@
 
   if File.exist?(sample_notes_file)
     sample_data = YAML.load_file(sample_notes_file)
-    sample_notes = sample_data['sample_notes'].map do |note_data|
+    sample_notes = sample_data['sample_notes'][@event.slug.to_s].map do |note_data|
       # Create a struct that acts like a Note model
       OpenStruct.new(
         title: note_data['title'],
@@ -44,7 +44,66 @@
 
 <%= stylesheet_link_tag "notes" %>
 
-<div class="min-h-screen aged-paper vintage-texture py-12 px-4" data-controller="modal expander">
+<div class="min-h-screen aged-paper vintage-texture py-12 px-4" data-controller="modal expander passcode" data-event-slug="<%= @event.slug %>">
+
+  <!-- Passcode Protection Modal -->
+  <% unless @authenticated %>
+    <div
+      class="fixed inset-0 flex items-center justify-center z-50 p-4"
+      data-passcode-target="modal"
+    >
+      <div
+        class="aged-paper vintage-texture rounded-sm shadow-2xl max-w-md w-full transform scale-100 transition-transform duration-300 border-4 border-[#2b2b2b]"
+        onclick="event.stopPropagation()"
+      >
+        <!-- Modal Header -->
+        <div class="px-6 md:px-8 py-6 border-b-2 border-[#2b2b2b] bg-[#ebe5d9]">
+          <div class="text-center">
+            <h2 class="text-2xl md:text-3xl font-light font-austin text-[#1a1a1a] tracking-wider uppercase">Enter Passcode</h2>
+            <p class="text-xs font-montserrat uppercase tracking-[0.3em] text-[#5a5a5a] mt-2">MISSED CONNECTIONS</p>
+          </div>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="px-6 md:px-8 py-8">
+          <p class="text-center font-austin text-sm text-[#5a5a5a] mb-6 italic">
+            Welcome! Enter the event passcode to continue.
+          </p>
+
+          <!-- 6 Digit Input -->
+          <div class="flex justify-center gap-2 mb-4">
+            <% 6.times do %>
+              <input
+                type="text"
+                maxlength="1"
+                data-passcode-target="input"
+                data-action="input->passcode#handleInput keydown->passcode#handleKeydown"
+                class="w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-austin border-2 border-[#2b2b2b] bg-[#fffcf4] text-[#1a1a1a] focus:outline-none focus:border-black focus:ring-2 focus:ring-[#8b7355] transition-all"
+                inputmode="numeric"
+                pattern="[0-9]*"
+              />
+            <% end %>
+          </div>
+
+          <!-- Error Message -->
+          <div
+            data-passcode-target="error"
+            class="text-center text-sm font-montserrat text-[#8b4545] uppercase tracking-wide opacity-0 transition-opacity duration-300 min-h-[20px]"
+          ></div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="px-6 md:px-8 py-4 border-t border-[#d4c5a9] bg-[#ebe5d9]">
+          <p class="text-[12px] font-montserrat text-center text-[#5a5a5a] tracking-wide italic">
+            Enter all 6 digits to unlock access
+          </p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Main Content Wrapper - Blurred when not authenticated -->
+  <div class="<%= 'filter blur-md pointer-events-none' unless @authenticated %>">
 
   <!-- Newspaper Masthead -->
   <div class="max-w-6xl mx-auto text-center mb-12 px-4">
@@ -292,5 +351,8 @@
         </p>
       </div>
     </div>
+  </div>
+
+  <!-- Close main content wrapper -->
   </div>
 </div>
