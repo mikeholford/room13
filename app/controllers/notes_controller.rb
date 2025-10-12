@@ -2,6 +2,9 @@ class NotesController < ApplicationController
   before_action :load_event
   before_action :check_authentication, only: [:index]
 
+
+  PASSCODE = "766613"
+
   def index
     @notes = @event.notes
     @note = Note.new
@@ -9,8 +12,7 @@ class NotesController < ApplicationController
   end
 
   def verify_passcode
-    passcode = Rails.application.credentials.event_codes[params[:event_slug]].to_s
-    if params[:passcode] == passcode
+    if params[:passcode] == PASSCODE
       session[:authenticated] = true
       session[:authenticated_at] = Time.current
       render json: { success: true }
