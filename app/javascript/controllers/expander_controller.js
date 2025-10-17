@@ -5,6 +5,9 @@ export default class extends Controller {
 
   connect() {
     this.handleKeydown = this.handleKeydown.bind(this)
+    this.photos = []
+    this.currentIndex = -1
+    this.currentType = null
   }
 
   open(event) {
@@ -14,6 +17,14 @@ export default class extends Controller {
     const date = element.dataset.expanderDate
     const category = element.dataset.expanderCategory
     const type = element.dataset.expanderType // 'note' or 'photo'
+
+    this.currentType = type
+
+    // If opening a photo, store all photos and current index
+    if (type === 'photo') {
+      this.photos = Array.from(document.querySelectorAll('.photo-item'))
+      this.currentIndex = parseInt(element.dataset.expanderIndex)
+    }
 
     if (type === 'note') {
       this.contentTarget.innerHTML = `
@@ -44,13 +55,8 @@ export default class extends Controller {
       const caption = element.dataset.expanderCaption
       const imageUrl = element.dataset.expanderImage
       this.contentTarget.innerHTML = `
-        <div class="torn-edge polaroid-card bg-white p-4 pb-12 max-w-lg mx-auto shadow-[4px_4px_12px_rgba(0,0,0,0.3),_8px_8px_24px_rgba(0,0,0,0.2)]">
-          <div class="aspect-square border border-[#d4c5a9] mb-3 overflow-hidden">
-            <img src="${imageUrl}" class="w-full h-full object-cover vintage-photo" alt="${caption}" />
-          </div>
-          <p class="font-austin text-base text-center text-[#5a5a5a] italic">
-            ${caption}
-          </p>
+        <div class="flex items-center justify-center h-full w-full">
+          <img src="${imageUrl}" class="max-w-[95vw] max-h-[95vh] object-contain" alt="${caption}" />
         </div>
       `
     }
@@ -68,11 +74,42 @@ export default class extends Controller {
 
     // Remove ESC key listener
     document.removeEventListener("keydown", this.handleKeydown)
+
+    // Reset photo navigation state
+    this.photos = []
+    this.currentIndex = -1
+    this.currentType = null
+  }
+
+  navigateToPhoto(index) {
+    if (index < 0 || index >= this.photos.length) return
+
+    const photo = this.photos[index]
+    const imageUrl = photo.dataset.expanderImage
+    const caption = photo.dataset.expanderCaption
+
+    this.currentIndex = index
+
+    this.contentTarget.innerHTML = `
+      <div class="flex items-center justify-center h-full w-full">
+        <img src="${imageUrl}" class="max-w-[95vw] max-h-[95vh] object-contain" alt="${caption}" />
+      </div>
+    `
   }
 
   handleKeydown(event) {
     if (event.key === "Escape") {
       this.close()
+    } else if (this.currentType === 'photo') {
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        event.preventDefault()
+        const nextIndex = (this.currentIndex + 1) % this.photos.length
+        this.navigateToPhoto(nextIndex)
+      } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+        event.preventDefault()
+        const prevIndex = (this.currentIndex - 1 + this.photos.length) % this.photos.length
+        this.navigateToPhoto(prevIndex)
+      }
     }
   }
 }

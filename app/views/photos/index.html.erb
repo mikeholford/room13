@@ -1,0 +1,157 @@
+<%
+  # Set meta tags for this page
+  set_meta_tags title: "Photos – #{@event.name}",
+                description: "Browse photos from #{@event.name}. Moments captured from an unforgettable night.",
+                keywords: "photos, #{@event.name}, art event, room 13, gallery",
+                og: {
+                  title: "Photos – #{@event.name}",
+                  description: "Browse photos from #{@event.name}. Moments captured from an unforgettable night.",
+                  image: image_url('shared/missed.png')
+                },
+                twitter: {
+                  title: "Photos – #{@event.name}",
+                  description: "Browse photos from #{@event.name}. Moments captured from an unforgettable night.",
+                  image: image_url('shared/missed.png')
+                }
+%>
+
+<%= stylesheet_link_tag "notes" %>
+
+<div class="min-h-screen aged-paper vintage-texture py-12 px-4" data-controller="expander passcode" data-event-slug="<%= @event.slug %>">
+
+  <!-- Passcode Protection Modal -->
+  <% unless @authenticated %>
+    <div
+      class="fixed inset-0 flex items-center justify-center z-50 p-4"
+      data-passcode-target="modal"
+    >
+      <div
+        class="aged-paper vintage-texture rounded-sm shadow-2xl max-w-md w-full transform scale-100 transition-transform duration-300 border-4 border-[#2b2b2b]"
+        onclick="event.stopPropagation()"
+      >
+        <!-- Modal Header -->
+        <div class="px-6 md:px-8 py-6 border-b-2 border-[#2b2b2b] bg-[#ebe5d9]">
+          <div class="text-center">
+            <h2 class="text-2xl md:text-3xl font-light font-austin text-[#1a1a1a] tracking-wider uppercase">Enter Passcode</h2>
+            <p class="text-xs font-montserrat uppercase tracking-[0.3em] text-[#5a5a5a] mt-2">PHOTO GALLERY</p>
+          </div>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="px-6 md:px-8 py-8">
+          <p class="text-center font-austin text-sm text-[#5a5a5a] mb-6 italic">
+            Welcome! Enter the event passcode to continue.
+          </p>
+
+          <!-- 6 Digit Input -->
+          <div class="flex justify-center gap-2 mb-4">
+            <% 6.times do %>
+              <input
+                type="text"
+                maxlength="1"
+                data-passcode-target="input"
+                data-action="input->passcode#handleInput keydown->passcode#handleKeydown"
+                class="w-12 h-14 md:w-14 md:h-16 text-center text-2xl font-austin border-2 border-[#2b2b2b] bg-[#fffcf4] text-[#1a1a1a] focus:outline-none focus:border-black focus:ring-2 focus:ring-[#8b7355] transition-all"
+                inputmode="numeric"
+                pattern="[0-9]*"
+              />
+            <% end %>
+          </div>
+
+          <!-- Error Message -->
+          <div
+            data-passcode-target="error"
+            class="text-center text-sm font-montserrat text-[#8b4545] uppercase tracking-wide opacity-0 transition-opacity duration-300 min-h-[20px]"
+          ></div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="px-6 md:px-8 py-4 border-t border-[#d4c5a9] bg-[#ebe5d9]">
+          <p class="text-[12px] font-montserrat text-center text-[#5a5a5a] tracking-wide italic">
+            Enter all 6 digits to unlock access
+          </p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Main Content Wrapper - Blurred when not authenticated -->
+  <div class="<%= 'filter blur-md pointer-events-none' unless @authenticated %>">
+
+    <!-- Newspaper Masthead -->
+    <div class="max-w-6xl mx-auto text-center mb-12 px-4">
+      <div class="vintage-divider mb-4"></div>
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-light font-austin text-[#1a1a1a] uppercase tracking-[0.15em] mb-3" style="line-height: 0.95;">
+        Photo Gallery
+      </h1>
+      <p class="text-base md:text-lg font-montserrat tracking-[0.4em] uppercase text-[#2b2b2b] font-medium mb-4">
+        <%= @event.name %>
+      </p>
+      <div class="vintage-divider mb-6"></div>
+
+
+      <!-- Explanatory Text -->
+      <div class="max-w-2xl mx-auto">
+        <p class="font-austin text-base md:text-lg lg:text-xl leading-relaxed text-[#5a5a5a] italic mb-2">
+          Moments captured from the event. Check back soon for more photos.
+        </p>
+      </div>
+    </div>
+
+    <!-- Photos Display - Masonry Grid -->
+    <div class="max-w-6xl mx-auto px-4">
+      <% if @photos.any? %>
+        <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+          <% @photos.each_with_index do |photo_path, index| %>
+            <%
+              # Get the full asset URL for use in the expander
+              photo_url = image_path(photo_path)
+            %>
+            <div class="break-inside-avoid">
+              <div
+                class="cursor-pointer shadow-[2px_2px_6px_rgba(0,0,0,0.2),_4px_4px_16px_rgba(0,0,0,0.12)] hover:shadow-[3px_3px_8px_rgba(0,0,0,0.25),_6px_6px_20px_rgba(0,0,0,0.15)] transition-all duration-300 photo-item"
+                data-action="click->expander#open"
+                data-expander-type="photo"
+                data-expander-caption=""
+                data-expander-image="<%= photo_url %>"
+                data-expander-index="<%= index %>"
+              >
+                <!-- Photo maintains aspect ratio -->
+                <div class="overflow-hidden">
+                  <%= image_tag photo_path, class: "w-full h-auto", alt: "Photo from #{@event.name}", loading: "lazy" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-12">
+          <div class="torn-edge note-clipping max-w-md mx-auto p-8 border border-[#d4c5a9] shadow-[2px_2px_6px_rgba(0,0,0,0.2),_4px_4px_16px_rgba(0,0,0,0.12)]">
+            <p class="font-austin text-xl text-[#5a5a5a] italic mb-4">
+              No photos yet.
+            </p>
+            <p class="font-montserrat text-xs uppercase tracking-wide text-[#8b7355]">
+              Check back soon
+            </p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Expander Modal -->
+    <div
+      class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-all duration-300 p-4"
+      data-expander-target="modal"
+      data-action="click->expander#close"
+    >
+      <div
+        class="max-w-4xl w-full"
+        data-expander-target="content"
+        data-action="click->expander#close"
+      >
+        <!-- Content will be injected here by the controller -->
+      </div>
+    </div>
+
+  </div>
+</div>

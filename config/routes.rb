@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   post "/:event_slug/" => "notes#create"
   post "/:event_slug/verify_passcode" => "notes#verify_passcode", as: :verify_passcode
 
+  # Event photos
+  get "/:event_slug/photos" => "photos#index", as: :event_photos
+
   # Defines the root path route ("/")
   root "statics#index"
 end

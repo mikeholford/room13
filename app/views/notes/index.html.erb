@@ -40,6 +40,18 @@
   # Shuffle available mood images to avoid repetition
   available_moods = [1, 2, 3, 7, 8, 10, 11, 12, 13, 14, 15].shuffle
   mood_index = 0
+
+  # Load photos for the preview card
+  photos_dir = Rails.root.join('app', 'assets', 'images', 'events', @event.slug)
+  preview_photos = []
+  if Dir.exist?(photos_dir)
+    image_extensions = %w[.jpg .jpeg .png .gif .webp]
+    preview_photos = Dir.glob(photos_dir.join('*')).select do |file|
+      File.file?(file) && image_extensions.include?(File.extname(file).downcase)
+    end.map do |file|
+      "events/#{@event.slug}/#{File.basename(file)}"
+    end.sort_by { |path| File.basename(path, '.*').to_i }.take(6) # Take first 6 photos
+  end
 %>
 
 <%= stylesheet_link_tag "notes" %>
@@ -146,6 +158,48 @@
           </div>
         </div>
       </div>
+
+      <!-- "Photos" Card - Second in Grid -->
+      <%= link_to event_photos_path(@event.slug) do %>
+        <div class="break-inside-avoid mb-6">
+          <div
+            class="torn-edge note-clipping border-2 border-dashed border-[#8b7355] overflow-hidden shadow-[2px_2px_4px_rgba(0,0,0,0.15),_4px_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[3px_3px_6px_rgba(0,0,0,0.2),_6px_6px_16px_rgba(0,0,0,0.15)] transition-all duration-300 cursor-pointer transform hover:scale-[1.05]"
+          >
+            <% if preview_photos.any? %>
+              <!-- Mini Photo Collage -->
+              <div class="grid grid-cols-3 gap-1 p-2">
+                <% preview_photos.take(6).each_with_index do |photo_path, idx| %>
+                  <div class="<%= idx == 0 ? 'col-span-2 row-span-2' : '' %> aspect-square overflow-hidden border border-[#d4c5a9]">
+                    <%= image_tag photo_path, class: "w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity", alt: "Photo preview", loading: "lazy" %>
+                  </div>
+                <% end %>
+              </div>
+              <!-- Title Overlay -->
+              <div class="px-4 py-3 bg-[#fffcf4] bg-opacity-90 text-center border-t-2 border-dashed border-[#8b7355]">
+                <h2 class="text-base md:text-lg font-austin text-[#2b2b2b] uppercase tracking-wider font-bold">
+                  Photos
+                </h2>
+                <p class="text-[10px] font-montserrat text-[#5a5a5a] tracking-wide">
+                  View <%= preview_photos.length %> <%= 'photo'.pluralize(preview_photos.length) %>
+                </p>
+              </div>
+            <% else %>
+              <!-- Fallback if no photos -->
+              <div class="p-6 text-center opacity-60 hover:opacity-100 transition-opacity duration-300">
+                <svg class="w-10 h-10 mx-auto mb-4" style="filter: invert(48%) sepia(10%) saturate(1000%) hue-rotate(350deg) brightness(85%) contrast(85%);" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 12c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3z"/>
+                </svg>
+                <h2 class="text-lg md:text-xl font-austin text-[#2b2b2b] uppercase tracking-wider mb-2 font-bold">
+                  Photos
+                </h2>
+                <p class="text-xs font-montserrat text-[#5a5a5a] tracking-wide">
+                  Check back soon
+                </p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
 
       <!-- Display Notes and Polaroid Photos -->
       <% if all_notes.any? %>
