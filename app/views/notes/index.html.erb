@@ -175,13 +175,10 @@
                 <% end %>
               </div>
               <!-- Title Overlay -->
-              <div class="px-4 py-3 bg-[#fffcf4] bg-opacity-90 text-center border-t-2 border-dashed border-[#8b7355]">
+              <div class="px-4 py-3 bg-[#fffcf4] bg-opacity-90 text-center">
                 <h2 class="text-base md:text-lg font-austin text-[#2b2b2b] uppercase tracking-wider font-bold">
-                  Photos
+                  Event Photographs
                 </h2>
-                <p class="text-[10px] font-montserrat text-[#5a5a5a] tracking-wide">
-                  View <%= preview_photos.length %> <%= 'photo'.pluralize(preview_photos.length) %>
-                </p>
               </div>
             <% else %>
               <!-- Fallback if no photos -->
@@ -205,7 +202,7 @@
       <% if all_notes.any? %>
         <%
           note_count = 0
-          next_photo = rand(2..6) # Random number between 2-6 for first photo
+          next_photo = rand(2..4) # Random number between 2-4 for first photo
         %>
         <% all_notes.each_with_index do |note, index| %>
           <%
@@ -263,10 +260,10 @@
             <%
               photo_rotation = [-2, -1, 1, 2][index % 4]
               note_count = 0
-              next_photo = rand(2..6) # Set next random interval
+              next_photo = rand(2..4) # Set next random interval
               caption = ["A moment captured", "The night we met", "Can't forget this", "Lost but not forgotten", "Where are you now?"][index % 5]
               # Use next image from shuffled array, cycle through if we run out
-              mood_image = "landing/mood-#{available_moods[mood_index % available_moods.length]}.jpg"
+              mood_image = "landing/#{available_moods[mood_index % available_moods.length]}.jpeg"
               mood_index += 1
             %>
             <div class="break-inside-avoid" style="transform: rotate(<%= photo_rotation %>deg);">
