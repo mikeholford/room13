@@ -12,17 +12,13 @@ sample_notes:
       body: "Trying to find the guy in the tiger jacket—amazing outfit! Please slide into my DMs at @mikeholford"
       category: "FASHION MOMENT"
   paris: 
-    - title: "MIDNIGHT AT THE COURTYARD"
-      body: "We danced under the café lights, the accordion player’s tune lingering as you told me your favorite Paris memory before disappearing into the night. Were you real, or just Parisian magic?"
-      category: "SERENDIPITOUS ENCOUNTER"
+    - title: "You! You know who you are ;)"
+      body: "Made plans to take a sage bath. Lost my phone that night. Contact room13 team please!"
+      category: "Lost & Found"
 
-    - title: "THE LOST BUS TICKET"
-      body: "You helped me translate the ticket machine and then shared your umbrella while we waited in the rain. If you see this, merci for making a soggy evening unforgettable."
-      category: "RANDOM KINDNESS"
-
-    - title: "SILHOUETTE ON THE STAIRS"
-      body: "We locked eyes by the spiral staircase beside the gallery, both laughing as we went for the same pastry. Next time, let's split one and chat—your laugh stuck with me all night."
-      category: "UNFINISHED CONVERSATION"
+    - title: "What a night!"
+      body: "All those oysters 🦪🦪🦪 Sassy recent NY to Paris transplant… market date one of these days? Ping me!! My phone didn't save your number, I hope you did better."
+      category: "Random Kindness"
   default:
     - title: "SKETCHBOOK DOODLES"
       body: "We both ended up comparing the doodles in our 'Guide to the Manor' sketchbook, laughing over shared themes. Your creative take inspired me to try something new. Hope to catch you at the next event!"
