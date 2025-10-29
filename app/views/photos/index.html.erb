@@ -16,8 +16,9 @@
 %>
 
 <%= stylesheet_link_tag "notes" %>
+<%= stylesheet_link_tag "photos" %>
 
-<div class="min-h-screen aged-paper vintage-texture py-12 px-4" data-controller="expander passcode masonry" data-event-slug="<%= @event.slug %>">
+<div class="min-h-screen aged-paper vintage-texture py-12 px-4" data-controller="expander passcode" data-event-slug="<%= @event.slug %>">
 
   <!-- Passcode Protection Modal -->
   <% unless @authenticated %>
@@ -98,42 +99,27 @@
       </div>
     </div>
 
-    <!-- Photos Display - Masonry Grid -->
+    <!-- Photos Display - Masonry.js -->
     <div class="max-w-6xl mx-auto px-4">
       <% if @photos.any? %>
-        <%
-          # Calculate how many photos to load immediately (approx. 2 viewport heights worth)
-          # Assuming average of 3 columns and ~400px height per photo
-          immediate_count = [12, @photos.length].min
-        %>
-        <div class="relative w-full" data-masonry-target="grid">
-          <% @photos.each_with_index do |photo_path, index| %>
+        <div class="photo-grid" id="photo-masonry">
+          <% @photos.each_with_index do |photo, index| %>
             <%
-              # Get the full asset URL for use in the expander
-              photo_url = image_path(photo_path)
-              is_immediate = index < immediate_count
+              # Photo is now a hash with :url, :key, :filename
+              photo_url = photo[:url]
             %>
             <div
-              class="cursor-pointer shadow-[2px_2px_6px_rgba(0,0,0,0.2),_4px_4px_16px_rgba(0,0,0,0.12)] hover:shadow-[3px_3px_8px_rgba(0,0,0,0.25),_6px_6px_20px_rgba(0,0,0,0.15)] transition-all duration-300 photo-item opacity-0"
-              data-masonry-target="item"
+              class="photo-grid-item cursor-pointer shadow-[2px_2px_6px_rgba(0,0,0,0.2),_4px_4px_16px_rgba(0,0,0,0.12)] hover:shadow-[3px_3px_8px_rgba(0,0,0,0.25),_6px_6px_20px_rgba(0,0,0,0.15)] transition-all duration-300 photo-item"
               data-action="click->expander#open"
               data-expander-type="photo"
               data-expander-caption=""
               data-expander-image="<%= photo_url %>"
               data-expander-index="<%= index %>"
-              style="opacity: 0;"
             >
-              <!-- Photo maintains aspect ratio -->
-              <div class="overflow-hidden">
-                <% if is_immediate %>
-                  <%= image_tag photo_path, class: "w-full h-auto block", alt: "Photo from #{@event.name}" %>
-                <% else %>
-                  <%= image_tag "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E",
-                      data: { src: image_path(photo_path) },
-                      class: "w-full h-auto block bg-[#f5f1e8]",
-                      alt: "Photo from #{@event.name}" %>
-                <% end %>
-              </div>
+              <%= image_tag photo_url,
+                  class: "w-full h-auto block rounded-sm",
+                  alt: "Photo from #{@event.name}",
+                  loading: "lazy" %>
             </div>
           <% end %>
         </div>
@@ -168,3 +154,68 @@
 
   </div>
 </div>
+
+<!-- Masonry.js Library -->
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
+<!-- Initialize Masonry with lazy loading support -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var grid = document.querySelector('#photo-masonry');
+
+    if (!grid) return;
+
+    // Initialize Masonry
+    var msnry = new Masonry(grid, {
+      itemSelector: '.photo-grid-item',
+      columnWidth: '.photo-grid-item',
+      percentPosition: true,
+      gutter: 24,
+      transitionDuration: '0.3s'
+    });
+
+    // Adjust gutter for desktop
+    function updateMasonryGutter() {
+      if (window.innerWidth >= 1024) {
+        msnry.options.gutter = 32;
+      } else {
+        msnry.options.gutter = 24;
+      }
+      msnry.layout();
+    }
+
+    // Update on window resize
+    var resizeTimeout;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(function() {
+        updateMasonryGutter();
+      }, 250);
+    });
+
+    // Re-layout when images load (for lazy loading)
+    var images = grid.querySelectorAll('img');
+    var imagesLoaded = 0;
+
+    images.forEach(function(img) {
+      if (img.complete) {
+        imagesLoaded++;
+        if (imagesLoaded === images.length) {
+          msnry.layout();
+        }
+      } else {
+        img.addEventListener('load', function() {
+          msnry.layout();
+        });
+
+        img.addEventListener('error', function() {
+          console.error('Failed to load image:', img.src);
+          msnry.layout();
+        });
+      }
+    });
+
+    // Initial layout
+    updateMasonryGutter();
+  });
+</script>

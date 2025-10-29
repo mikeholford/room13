@@ -20,26 +20,7 @@ class PhotosController < ApplicationController
   end
 
   def load_photos
-    photos_dir = Rails.root.join('app', 'assets', 'images', 'events', @event.slug)
-
-    return [] unless Dir.exist?(photos_dir)
-
-    # Get all image files from the directory
-    image_extensions = %w[.jpg .jpeg .png .gif .webp]
-    Dir.glob(photos_dir.join('*')).select do |file|
-      File.file?(file) && image_extensions.include?(File.extname(file).downcase)
-    end.map do |file|
-      # Return asset path for use with asset pipeline
-      "events/#{@event.slug}/#{File.basename(file)}"
-    end.sort_by do |path|
-      # Extract the number after the last dash for sorting
-      # e.g., "2025_CAVENDISH_LONDON_ROOM 13-241.jpg" -> 241
-      basename = File.basename(path, '.*')
-      if basename =~ /-(\d+)$/
-        $1.to_i
-      else
-        0
-      end
-    end
+    service = PhotoS3Service.new(@event.slug)
+    service.list_photos
   end
 end

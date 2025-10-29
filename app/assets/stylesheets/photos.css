@@ -1,0 +1,42 @@
+/* Photo Gallery with Masonry.js */
+
+/* Grid container */
+.photo-grid {
+  width: 100%;
+}
+
+/* Grid item sizing */
+.photo-grid-item {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 768px) {
+  .photo-grid-item {
+    width: calc(50% - 12px);
+    margin-bottom: 24px;
+  }
+}
+
+/* Desktop: 3 columns */
+@media (min-width: 1024px) {
+  .photo-grid-item {
+    width: calc(33.333% - 21.333px);
+    margin-bottom: 32px;
+  }
+}
+
+/* Photo styling */
+.photo-grid-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.125rem;
+  transition: transform 0.3s ease;
+}
+
+/* Hover effect */
+.photo-grid-item:hover img {
+  transform: scale(1.02);
+}
