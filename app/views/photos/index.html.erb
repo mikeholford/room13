@@ -17,7 +17,7 @@
 
 <%= stylesheet_link_tag "notes" %>
 
-<div class="min-h-screen aged-paper vintage-texture py-12 px-4" data-controller="expander passcode" data-event-slug="<%= @event.slug %>">
+<div class="min-h-screen aged-paper vintage-texture py-12 px-4" data-controller="expander passcode masonry" data-event-slug="<%= @event.slug %>">
 
   <!-- Passcode Protection Modal -->
   <% unless @authenticated %>
@@ -101,25 +101,38 @@
     <!-- Photos Display - Masonry Grid -->
     <div class="max-w-6xl mx-auto px-4">
       <% if @photos.any? %>
-        <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+        <%
+          # Calculate how many photos to load immediately (approx. 2 viewport heights worth)
+          # Assuming average of 3 columns and ~400px height per photo
+          immediate_count = [12, @photos.length].min
+        %>
+        <div class="relative w-full" data-masonry-target="grid">
           <% @photos.each_with_index do |photo_path, index| %>
             <%
               # Get the full asset URL for use in the expander
               photo_url = image_path(photo_path)
+              is_immediate = index < immediate_count
             %>
-            <div class="break-inside-avoid">
-              <div
-                class="cursor-pointer shadow-[2px_2px_6px_rgba(0,0,0,0.2),_4px_4px_16px_rgba(0,0,0,0.12)] hover:shadow-[3px_3px_8px_rgba(0,0,0,0.25),_6px_6px_20px_rgba(0,0,0,0.15)] transition-all duration-300 photo-item"
-                data-action="click->expander#open"
-                data-expander-type="photo"
-                data-expander-caption=""
-                data-expander-image="<%= photo_url %>"
-                data-expander-index="<%= index %>"
-              >
-                <!-- Photo maintains aspect ratio -->
-                <div class="overflow-hidden">
-                  <%= image_tag photo_path, class: "w-full h-auto", alt: "Photo from #{@event.name}", loading: "lazy" %>
-                </div>
+            <div
+              class="cursor-pointer shadow-[2px_2px_6px_rgba(0,0,0,0.2),_4px_4px_16px_rgba(0,0,0,0.12)] hover:shadow-[3px_3px_8px_rgba(0,0,0,0.25),_6px_6px_20px_rgba(0,0,0,0.15)] transition-all duration-300 photo-item opacity-0"
+              data-masonry-target="item"
+              data-action="click->expander#open"
+              data-expander-type="photo"
+              data-expander-caption=""
+              data-expander-image="<%= photo_url %>"
+              data-expander-index="<%= index %>"
+              style="opacity: 0;"
+            >
+              <!-- Photo maintains aspect ratio -->
+              <div class="overflow-hidden">
+                <% if is_immediate %>
+                  <%= image_tag photo_path, class: "w-full h-auto block", alt: "Photo from #{@event.name}" %>
+                <% else %>
+                  <%= image_tag "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E",
+                      data: { src: image_path(photo_path) },
+                      class: "w-full h-auto block bg-[#f5f1e8]",
+                      alt: "Photo from #{@event.name}" %>
+                <% end %>
               </div>
             </div>
           <% end %>

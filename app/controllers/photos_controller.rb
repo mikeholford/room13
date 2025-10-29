@@ -31,6 +31,15 @@ class PhotosController < ApplicationController
     end.map do |file|
       # Return asset path for use with asset pipeline
       "events/#{@event.slug}/#{File.basename(file)}"
-    end.sort_by { |path| File.basename(path, '.*').to_i }
+    end.sort_by do |path|
+      # Extract the number after the last dash for sorting
+      # e.g., "2025_CAVENDISH_LONDON_ROOM 13-241.jpg" -> 241
+      basename = File.basename(path, '.*')
+      if basename =~ /-(\d+)$/
+        $1.to_i
+      else
+        0
+      end
+    end
   end
 end
