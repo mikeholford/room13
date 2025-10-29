@@ -41,17 +41,9 @@
   available_moods = [1, 2, 3, 7, 8, 10, 11, 12, 13, 14, 15].shuffle
   mood_index = 0
 
-  # Load photos for the preview card
-  photos_dir = Rails.root.join('app', 'assets', 'images', 'events', @event.slug)
-  preview_photos = []
-  if Dir.exist?(photos_dir)
-    image_extensions = %w[.jpg .jpeg .png .gif .webp]
-    preview_photos = Dir.glob(photos_dir.join('*')).select do |file|
-      File.file?(file) && image_extensions.include?(File.extname(file).downcase)
-    end.map do |file|
-      "events/#{@event.slug}/#{File.basename(file)}"
-    end.sort_by { |path| File.basename(path, '.*').to_i }.take(6) # Take first 6 photos
-  end
+  # Load photos from S3 for the preview card
+  photo_service = PhotoS3Service.new(@event.slug)
+  preview_photos = photo_service.list_photos.take(6)
 %>
 
 <%= stylesheet_link_tag "notes" %>
@@ -160,7 +152,7 @@
       </div>
 
       <!-- "Photos" Card - Second in Grid -->
-      <%= link_to event_photos_path(@event.slug) do %>
+      <%= link_to event_photos_path(@event.slug), data: { turbo: false } do %>
         <div class="break-inside-avoid mb-6">
           <div
             class="torn-edge note-clipping border-2 border-dashed border-[#8b7355] overflow-hidden shadow-[2px_2px_4px_rgba(0,0,0,0.15),_4px_4px_12px_rgba(0,0,0,0.1)] hover:shadow-[3px_3px_6px_rgba(0,0,0,0.2),_6px_6px_16px_rgba(0,0,0,0.15)] transition-all duration-300 cursor-pointer transform hover:scale-[1.05]"
@@ -168,9 +160,9 @@
             <% if preview_photos.any? %>
               <!-- Mini Photo Collage -->
               <div class="grid grid-cols-3 gap-1 p-2">
-                <% preview_photos.take(6).each_with_index do |photo_path, idx| %>
+                <% preview_photos.each_with_index do |photo, idx| %>
                   <div class="<%= idx == 0 ? 'col-span-2 row-span-2' : '' %> aspect-square overflow-hidden border border-[#d4c5a9]">
-                    <%= image_tag photo_path, class: "w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity", alt: "Photo preview", loading: "lazy" %>
+                    <%= image_tag photo[:url], class: "w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity", alt: "Photo preview", loading: "lazy" %>
                   </div>
                 <% end %>
               </div>
