@@ -37,13 +37,11 @@
   # Order real notes by most recent first, then add sample notes
   all_notes = @notes.to_a.sort_by(&:created_at).reverse + sample_notes
 
-  # Shuffle available mood images to avoid repetition
-  available_moods = [1, 2, 3, 7, 8, 10, 11, 12, 13, 14, 15].shuffle
-  mood_index = 0
-
-  # Load photos from S3 for the preview card
+  # Load photos from S3 - shuffle for random polaroid selection
   photo_service = PhotoS3Service.new(@event.slug)
-  preview_photos = photo_service.list_photos.take(6)
+  all_event_photos = photo_service.list_photos.shuffle
+  preview_photos = all_event_photos.take(6)
+  photo_index = 0
 %>
 
 <%= stylesheet_link_tag "notes" %>
@@ -248,15 +246,16 @@
           </div>
 
           <!-- Insert Vintage Polaroid Photo randomly between 2-6 notes -->
-          <% if note_count >= next_photo %>
+          <% if note_count >= next_photo && all_event_photos.any? %>
             <%
               photo_rotation = [-2, -1, 1, 2][index % 4]
               note_count = 0
               next_photo = rand(2..4) # Set next random interval
               caption = ["A moment captured", "The night we met", "Can't forget this", "Lost but not forgotten", "Where are you now?"][index % 5]
-              # Use next image from shuffled array, cycle through if we run out
-              mood_image = "landing/#{available_moods[mood_index % available_moods.length]}.jpeg"
-              mood_index += 1
+              # Use next photo from shuffled S3 photos, cycle through if we run out
+              current_photo = all_event_photos[photo_index % all_event_photos.length]
+              photo_url = current_photo[:url]
+              photo_index += 1
             %>
             <div class="break-inside-avoid" style="transform: rotate(<%= photo_rotation %>deg);">
               <div
@@ -265,12 +264,12 @@
                 data-action="click->expander#open"
                 data-expander-type="photo"
                 data-expander-caption="<%= caption %>"
-                data-expander-image="<%= asset_path(mood_image) %>"
+                data-expander-image="<%= photo_url %>"
               >
 
-                <!-- Random mood photo with vintage effect -->
+                <!-- Random event photo with vintage effect -->
                 <div class="aspect-square border border-[#d4c5a9] overflow-hidden">
-                  <%= image_tag mood_image, class: "w-full h-full object-cover vintage-photo" %>
+                  <%= image_tag photo_url, class: "w-full h-full object-cover vintage-photo", loading: "lazy" %>
                 </div>
               </div>
             </div>
