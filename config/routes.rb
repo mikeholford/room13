@@ -12,6 +12,12 @@ Rails.application.routes.draw do
   match "/about" => "statics#about", via: :all, as: :about
   match "/login" => "statics#login", via: :all, as: :login
 
+  # Membership routes
+  get "/membership" => "memberships#index", as: :membership
+  get "/membership/apply" => "memberships#apply", as: :membership_apply
+  post "/membership/apply" => "memberships#create"
+  get "/membership/thank-you" => "memberships#thank_you", as: :membership_thank_you
+
   # Event notes (Missed Connections)
   get "/:event_slug/" => "notes#index", as: :event_notes
   post "/:event_slug/" => "notes#create"

@@ -1,0 +1,505 @@
+<!-- Override attachShadow BEFORE Google Maps loads to style the autocomplete -->
+<script nonce="<%= content_security_policy_nonce %>">
+(function() {
+  const attachShadow = Element.prototype.attachShadow;
+  
+  Element.prototype.attachShadow = function(init) {
+    // Check if this is the Google Places autocomplete element
+    if (this.localName === 'gmp-place-autocomplete') {
+      // Override to open mode so we can inject styles
+      const shadow = attachShadow.call(this, {
+        ...init,
+        mode: 'open'
+      });
+      
+      const style = document.createElement('style');
+      
+      // Apply custom styles to match your form inputs exactly
+      style.textContent = `
+        .widget-container {
+          border: none !important;
+        }
+        
+        .input-container {
+          border: 1px solid rgb(209, 213, 219) !important;
+          border-radius: 0 !important;
+          background-color: white !important;
+          box-shadow: none !important;
+        }
+        
+        .input-container:focus-within {
+          border-color: #1a1a1a !important;
+          box-shadow: 0 0 0 1px #1a1a1a !important;
+        }
+        
+        .focus-ring {
+          display: none !important;
+        }
+        
+        input {
+          font-family: 'Montserrat', sans-serif !important;
+          font-size: 1rem !important;
+          line-height: 1.5rem !important;
+          color: #1a1a1a !important;
+          background: transparent !important;
+          border: none !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          outline: none !important;
+        }
+        
+        input::placeholder {
+          color: #9ca3af !important;
+        }
+      `;
+      
+      shadow.appendChild(style);
+      return shadow;
+    }
+    
+    // For other elements, use default behavior
+    return attachShadow.call(this, init);
+  };
+})();
+</script>
+
+<section class="py-20 bg-[#f8f5f0] min-h-screen">
+  <div class="max-w-4xl mx-auto px-8">
+    
+    <a href="/membership">
+      <span class="inline-flex items-center text-gray-700 hover:text-gray-900 font-montserrat text-sm uppercase">
+        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Back
+      </span>
+    </a>
+
+    <div class="text-center mb-12 mt-8">
+      <h2 class="text-4xl md:text-5xl tracking-[0.1em] font-light mb-4 font-austin text-gray-900">
+        MEMBERSHIP APPLICATION
+      </h2>
+      <p class="text-gray-600 text-sm tracking-[0.2em] uppercase font-montserrat">
+        Tell us about yourself
+      </p>
+    </div>
+
+    <%= form_with model: @member || Member.new, url: membership_apply_path, method: :post, data: { controller: "membership-form form-validation", membership_form_storage_key_value: "room13_membership_application" }, class: "space-y-12", novalidate: true do |f| %>
+      
+      <!-- Personal Details Section -->
+      <div class="bg-white p-8 shadow-sm">
+        <h3 class="text-2xl tracking-[0.15em] font-light mb-6 font-austin text-gray-900 border-b border-gray-200 pb-3">
+          YOUR DETAILS
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <%= f.label :first_name, "First Name *", class: "block text-sm tracking-[0.1em] uppercase font-montserrat text-gray-700 mb-2" %>
+            <%= f.text_field :first_name, 
+                required: true,
+                placeholder: "John",
+                data: { 
+                  membership_form_target: "input", 
+                  form_validation_target: "field",
+                  action: "input->membership-form#saveForm blur->form-validation#validateField" 
+                },
+                class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat" %>
+            <p class="text-red-600 text-sm mt-1 hidden" data-form-validation-target="error"></p>
+            <% if @member&.errors&.include?(:first_name) %>
+              <p class="text-red-600 text-sm mt-1"><%= @member.errors[:first_name].first %></p>
+            <% end %>
+          </div>
+
+          <div>
+            <%= f.label :last_name, "Last Name *", class: "block text-sm tracking-[0.1em] uppercase font-montserrat text-gray-700 mb-2" %>
+            <%= f.text_field :last_name, 
+                required: true,
+                placeholder: "Doe",
+                data: { 
+                  membership_form_target: "input", 
+                  form_validation_target: "field",
+                  action: "input->membership-form#saveForm blur->form-validation#validateField" 
+                },
+                class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat" %>
+            <p class="text-red-600 text-sm mt-1 hidden" data-form-validation-target="error"></p>
+            <% if @member&.errors&.include?(:last_name) %>
+              <p class="text-red-600 text-sm mt-1"><%= @member.errors[:last_name].first %></p>
+            <% end %>
+          </div>
+
+          <div>
+            <%= f.label :nickname, "Nickname", class: "block text-sm tracking-[0.1em] uppercase font-montserrat text-gray-700 mb-2" %>
+            <%= f.text_field :nickname, 
+                placeholder: "What should we call you?",
+                data: { membership_form_target: "input", action: "input->membership-form#saveForm" },
+                class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat" %>
+          </div>
+
+          <div>
+            <%= f.label :email, "Email *", class: "block text-sm tracking-[0.1em] uppercase font-montserrat text-gray-700 mb-2" %>
+            <%= f.email_field :email, 
+                required: true,
+                placeholder: "john@example.com",
+                data: { 
+                  membership_form_target: "input", 
+                  form_validation_target: "field",
+                  action: "input->membership-form#saveForm blur->form-validation#validateField" 
+                },
+                class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat" %>
+            <p class="text-red-600 text-sm mt-1 hidden" data-form-validation-target="error"></p>
+            <% if @member&.errors&.include?(:email) %>
+              <p class="text-red-600 text-sm mt-1"><%= @member.errors[:email].first %></p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Address Section -->
+      <div class="bg-white p-8 shadow-sm" data-controller="address-autocomplete" data-address-autocomplete-api-key-value="<%= Rails.application.credentials.google_cloud[:api_key] %>">
+        <h3 class="text-2xl tracking-[0.15em] font-light mb-6 font-austin text-gray-900 border-b border-gray-200 pb-3">
+          ADDRESS
+        </h3>
+        
+        <div class="mb-6">
+          <label class="block text-sm tracking-[0.1em] uppercase font-montserrat text-gray-700 mb-2">
+            Search Address
+          </label>
+          <input 
+            type="text" 
+            data-address-autocomplete-target="search"
+            placeholder="Start typing your address..."
+            class="w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat" />
+          <p class="text-gray-500 text-xs mt-1 font-montserrat">Begin typing to search and select your address</p>
+        </div>
+
+        <div data-address-autocomplete-target="addressFields" class="space-y-6">
+          <div>
+            <%= f.label :address_line_1, "Address Line 1", class: "block text-sm tracking-[0.1em] uppercase font-montserrat text-gray-700 mb-2" %>
+            <%= f.text_field :address_line_1, 
+                placeholder: "123 Main Street",
+                data: { 
+                  address_autocomplete_target: "addressLine1",
+                  membership_form_target: "input", 
+                  action: "input->membership-form#saveForm" 
+                },
+                class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat" %>
+          </div>
+
+          <div>
+            <%= f.label :address_line_2, "Address Line 2", class: "block text-sm tracking-[0.1em] uppercase font-montserrat text-gray-700 mb-2" %>
+            <%= f.text_field :address_line_2, 
+                placeholder: "Apt 4B (optional)",
+                data: { 
+                  address_autocomplete_target: "addressLine2",
+                  membership_form_target: "input", 
+                  action: "input->membership-form#saveForm" 
+                },
+                class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat" %>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <%= f.label :city, "City / Locality", class: "block text-sm tracking-[0.1em] uppercase font-montserrat text-gray-700 mb-2" %>
+              <%= f.text_field :city, 
+                  placeholder: "New York",
+                  data: { 
+                    address_autocomplete_target: "city",
+                    membership_form_target: "input", 
+                    action: "input->membership-form#saveForm" 
+                  },
+                  class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat" %>
+            </div>
+
+            <div>
+              <%= f.label :state, "State / Province / Region", class: "block text-sm tracking-[0.1em] uppercase font-montserrat text-gray-700 mb-2" %>
+              <%= f.text_field :state, 
+                  placeholder: "NY",
+                  data: { 
+                    address_autocomplete_target: "state",
+                    membership_form_target: "input", 
+                    action: "input->membership-form#saveForm" 
+                  },
+                  class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat" %>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <%= f.label :postal_code, "Postal / ZIP Code", class: "block text-sm tracking-[0.1em] uppercase font-montserrat text-gray-700 mb-2" %>
+              <%= f.text_field :postal_code, 
+                  placeholder: "10001",
+                  data: { 
+                    address_autocomplete_target: "postalCode",
+                    membership_form_target: "input", 
+                    action: "input->membership-form#saveForm" 
+                  },
+                  class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat" %>
+            </div>
+
+            <div>
+              <%= f.label :country, "Country", class: "block text-sm tracking-[0.1em] uppercase font-montserrat text-gray-700 mb-2" %>
+              <%= f.select :country, 
+                  [
+                    ["United States", "United States"],
+                    ["United Kingdom", "United Kingdom"],
+                    ["France", "France"],
+                    ["Germany", "Germany"],
+                    ["Italy", "Italy"],
+                    ["Switzerland", "Switzerland"],
+                    ["Spain", "Spain"],
+                    ["Netherlands", "Netherlands"],
+                    ["Belgium", "Belgium"],
+                    ["Austria", "Austria"],
+                    ["---", "---"],
+                    ["Afghanistan", "Afghanistan"],
+                    ["Albania", "Albania"],
+                    ["Algeria", "Algeria"],
+                    ["Andorra", "Andorra"],
+                    ["Angola", "Angola"],
+                    ["Argentina", "Argentina"],
+                    ["Armenia", "Armenia"],
+                    ["Australia", "Australia"],
+                    ["Azerbaijan", "Azerbaijan"],
+                    ["Bahrain", "Bahrain"],
+                    ["Bangladesh", "Bangladesh"],
+                    ["Belarus", "Belarus"],
+                    ["Bhutan", "Bhutan"],
+                    ["Bolivia", "Bolivia"],
+                    ["Bosnia and Herzegovina", "Bosnia and Herzegovina"],
+                    ["Brazil", "Brazil"],
+                    ["Brunei", "Brunei"],
+                    ["Bulgaria", "Bulgaria"],
+                    ["Cambodia", "Cambodia"],
+                    ["Canada", "Canada"],
+                    ["Chile", "Chile"],
+                    ["China", "China"],
+                    ["Colombia", "Colombia"],
+                    ["Costa Rica", "Costa Rica"],
+                    ["Croatia", "Croatia"],
+                    ["Cuba", "Cuba"],
+                    ["Cyprus", "Cyprus"],
+                    ["Czech Republic", "Czech Republic"],
+                    ["Denmark", "Denmark"],
+                    ["Dominican Republic", "Dominican Republic"],
+                    ["Ecuador", "Ecuador"],
+                    ["Egypt", "Egypt"],
+                    ["El Salvador", "El Salvador"],
+                    ["Estonia", "Estonia"],
+                    ["Ethiopia", "Ethiopia"],
+                    ["Finland", "Finland"],
+                    ["Georgia", "Georgia"],
+                    ["Ghana", "Ghana"],
+                    ["Greece", "Greece"],
+                    ["Guatemala", "Guatemala"],
+                    ["Honduras", "Honduras"],
+                    ["Hong Kong", "Hong Kong"],
+                    ["Hungary", "Hungary"],
+                    ["Iceland", "Iceland"],
+                    ["India", "India"],
+                    ["Indonesia", "Indonesia"],
+                    ["Iran", "Iran"],
+                    ["Iraq", "Iraq"],
+                    ["Ireland", "Ireland"],
+                    ["Israel", "Israel"],
+                    ["Jamaica", "Jamaica"],
+                    ["Japan", "Japan"],
+                    ["Jordan", "Jordan"],
+                    ["Kazakhstan", "Kazakhstan"],
+                    ["Kenya", "Kenya"],
+                    ["Kuwait", "Kuwait"],
+                    ["Kyrgyzstan", "Kyrgyzstan"],
+                    ["Laos", "Laos"],
+                    ["Latvia", "Latvia"],
+                    ["Lebanon", "Lebanon"],
+                    ["Libya", "Libya"],
+                    ["Liechtenstein", "Liechtenstein"],
+                    ["Lithuania", "Lithuania"],
+                    ["Luxembourg", "Luxembourg"],
+                    ["Macau", "Macau"],
+                    ["Madagascar", "Madagascar"],
+                    ["Malaysia", "Malaysia"],
+                    ["Maldives", "Maldives"],
+                    ["Malta", "Malta"],
+                    ["Mexico", "Mexico"],
+                    ["Monaco", "Monaco"],
+                    ["Mongolia", "Mongolia"],
+                    ["Montenegro", "Montenegro"],
+                    ["Morocco", "Morocco"],
+                    ["Myanmar", "Myanmar"],
+                    ["Nepal", "Nepal"],
+                    ["New Zealand", "New Zealand"],
+                    ["Nicaragua", "Nicaragua"],
+                    ["Nigeria", "Nigeria"],
+                    ["North Macedonia", "North Macedonia"],
+                    ["Norway", "Norway"],
+                    ["Oman", "Oman"],
+                    ["Pakistan", "Pakistan"],
+                    ["Palestine", "Palestine"],
+                    ["Panama", "Panama"],
+                    ["Paraguay", "Paraguay"],
+                    ["Peru", "Peru"],
+                    ["Philippines", "Philippines"],
+                    ["Poland", "Poland"],
+                    ["Portugal", "Portugal"],
+                    ["Qatar", "Qatar"],
+                    ["Romania", "Romania"],
+                    ["Russia", "Russia"],
+                    ["Saudi Arabia", "Saudi Arabia"],
+                    ["Senegal", "Senegal"],
+                    ["Serbia", "Serbia"],
+                    ["Singapore", "Singapore"],
+                    ["Slovakia", "Slovakia"],
+                    ["Slovenia", "Slovenia"],
+                    ["South Africa", "South Africa"],
+                    ["South Korea", "South Korea"],
+                    ["Sri Lanka", "Sri Lanka"],
+                    ["Sweden", "Sweden"],
+                    ["Syria", "Syria"],
+                    ["Taiwan", "Taiwan"],
+                    ["Tajikistan", "Tajikistan"],
+                    ["Tanzania", "Tanzania"],
+                    ["Thailand", "Thailand"],
+                    ["Tunisia", "Tunisia"],
+                    ["Turkey", "Turkey"],
+                    ["Turkmenistan", "Turkmenistan"],
+                    ["Uganda", "Uganda"],
+                    ["Ukraine", "Ukraine"],
+                    ["United Arab Emirates", "United Arab Emirates"],
+                    ["Uruguay", "Uruguay"],
+                    ["Uzbekistan", "Uzbekistan"],
+                    ["Venezuela", "Venezuela"],
+                    ["Vietnam", "Vietnam"],
+                    ["Yemen", "Yemen"],
+                    ["Zambia", "Zambia"],
+                    ["Zimbabwe", "Zimbabwe"]
+                  ],
+                  { include_blank: "Select a country" },
+                  data: { 
+                    address_autocomplete_target: "country",
+                    membership_form_target: "input", 
+                    action: "change->membership-form#saveForm" 
+                  },
+                  class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat" %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Professional Section -->
+      <div class="bg-white p-8 shadow-sm">
+        <h3 class="text-2xl tracking-[0.15em] font-light mb-6 font-austin text-gray-900 border-b border-gray-200 pb-3">
+          PROFESSIONAL
+        </h3>
+        
+        <div>
+          <%= f.label :occupation, "Occupation", class: "block text-sm tracking-[0.1em] uppercase font-montserrat text-gray-700 mb-2" %>
+          <%= f.text_field :occupation, 
+              placeholder: "Artist, Collector, Gallerist, Curator, etc.",
+              data: { membership_form_target: "input", action: "input->membership-form#saveForm" },
+              class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat" %>
+        </div>
+      </div>
+
+      <!-- Art Events Section -->
+      <div class="bg-white p-8 shadow-sm">
+        <h3 class="text-2xl tracking-[0.15em] font-light mb-6 font-austin text-gray-900 border-b border-gray-200 pb-3">
+          ART EVENTS YOU FREQUENTLY ATTEND
+        </h3>
+        
+        <p class="text-gray-600 text-sm tracking-[0.1em] font-montserrat mb-6">
+          Select the art events and fairs you typically attend
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <% art_events = [
+            ["Art SG Singapore", "art_sg_singapore"],
+            ["Art Dubai", "art_dubai"],
+            ["1-54 Marrakech", "1_54_marrakech"],
+            ["Zona MACO Mexico City", "zona_maco"],
+            ["TEFAF Maastricht", "tefaf_maastricht"],
+            ["Art Basel Hong Kong", "art_basel_hong_kong"],
+            ["Frieze Los Angeles", "frieze_los_angeles"],
+            ["Frieze Seoul", "frieze_seoul"],
+            ["Miart Milan", "miart_milan"],
+            ["Frieze New York", "frieze_new_york"],
+            ["Venice Biennale", "venice_biennale"],
+            ["Art Basel (Basel)", "art_basel_basel"],
+            ["Documenta Kassel", "documenta_kassel"],
+            ["Art Basel Miami Beach", "art_basel_miami"],
+            ["Frieze London", "frieze_london"],
+            ["FIAC / Paris+ par Art Basel", "paris_plus_art_basel"],
+            ["India Art Fair Mumbai", "india_art_fair"],
+            ["Abu Dhabi Art", "abu_dhabi_art"],
+            ["Art Brussels", "art_brussels"],
+            ["Kochi-Muziris Biennale", "kochi_muziris_biennale"],
+            ["Kathmandu Triennale", "kathmandu_triennale"],
+          ] %>
+          
+          <% art_events.each do |label, value| %>
+            <div class="flex items-start">
+              <%= check_box_tag "member[additional_responses][art_events][]", value, false,
+                  data: { membership_form_target: "input", action: "change->membership-form#saveForm" },
+                  id: "art_event_#{value}",
+                  class: "mt-1 h-4 w-4 text-gray-900 border-gray-300 focus:ring-gray-900" %>
+              <%= label_tag "art_event_#{value}", label, class: "ml-3 text-sm tracking-[0.05em] font-montserrat text-gray-700" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Proust Questions Section -->
+      <div class="bg-white p-8 shadow-sm">
+        <h3 class="text-2xl tracking-[0.15em] font-light mb-6 font-austin text-gray-900 border-b border-gray-200 pb-3">
+          PERSONAL QUESTIONS
+        </h3>
+        
+        <p class="text-gray-600 text-sm tracking-[0.1em] font-montserrat mb-6 italic">
+          Inspired by Proust and Max Frisch's Questionnaire
+        </p>
+
+        <div class="space-y-6">
+          <% proust_questions = [
+            ["What do you most value in your friends?", "value_in_friends"],
+            ["What is your most treasured possession?", "treasured_possession"],
+            ["When and where were you happiest?", "happiest_moment"],
+            ["What is your motto?", "motto"]
+          ] %>
+
+          <% proust_questions.each do |question, key| %>
+            <div>
+              <%= label_tag "member_additional_responses_#{key}", question, class: "block text-sm tracking-[0.05em] font-montserrat text-gray-700 mb-2" %>
+              <%= text_area_tag "member[additional_responses][proust_questions][#{key}]", nil,
+                  rows: 3,
+                  data: { membership_form_target: "input", action: "input->membership-form#saveForm" },
+                  placeholder: "Your answer...",
+                  class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat resize-none" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-center pt-4">
+        <%= f.submit "Submit Application", 
+            data: { 
+              action: "click->membership-form#clearStorage click->form-validation#validateAll",
+              form_validation_target: "submit"
+            },
+            class: "px-16 py-4 bg-gray-900 text-white tracking-[0.2em] uppercase font-montserrat text-sm hover:bg-gray-800 transition-colors duration-300 cursor-pointer" %>
+        <p class="text-red-600 text-sm mt-4 hidden" data-form-validation-target="submitError">
+          Please correct the errors above before submitting
+        </p>
+        <p class="text-gray-500 text-xs mt-4 font-montserrat">
+          * Required fields
+        </p>
+        <p class="text-gray-500 text-xs mt-2 font-montserrat">
+          Your progress is automatically saved
+        </p>
+      </div>
+
+    <% end %>
+
+  </div>
+</section>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= Rails.application.credentials.google_cloud[:api_key] %>&libraries=places&callback=Function.prototype&loading=async" async defer></script>

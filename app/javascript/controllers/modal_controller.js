@@ -4,6 +4,9 @@ export default class extends Controller {
   static targets = ["content", "modal"]
 
   connect() {
+    // Only initialize if modal target exists
+    if (!this.hasModalTarget) return
+
     // Close modal when clicking outside
     this.modalTarget.addEventListener("click", (event) => {
       if (event.target === this.modalTarget) {
@@ -21,10 +24,14 @@ export default class extends Controller {
   }
 
   disconnect() {
-    document.removeEventListener("keydown", this.escapeHandler)
+    if (this.escapeHandler) {
+      document.removeEventListener("keydown", this.escapeHandler)
+    }
   }
 
   open() {
+    if (!this.hasModalTarget || !this.hasContentTarget) return
+
     // Show modal with animation
     this.modalTarget.classList.remove("opacity-0", "pointer-events-none")
     this.contentTarget.classList.remove("scale-95")
@@ -35,6 +42,8 @@ export default class extends Controller {
   }
 
   close() {
+    if (!this.hasModalTarget || !this.hasContentTarget) return
+
     // Hide modal with animation
     this.modalTarget.classList.add("opacity-0", "pointer-events-none")
     this.contentTarget.classList.remove("scale-100")

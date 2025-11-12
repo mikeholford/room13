@@ -4,6 +4,9 @@ export default class extends Controller {
   static targets = ["modal", "content"]
 
   connect() {
+    // Only initialize if targets exist
+    if (!this.hasModalTarget || !this.hasContentTarget) return
+    
     this.handleKeydown = this.handleKeydown.bind(this)
     this.photos = []
     this.currentIndex = -1
@@ -11,6 +14,8 @@ export default class extends Controller {
   }
 
   open(event) {
+    if (!this.hasModalTarget || !this.hasContentTarget) return
+    
     const element = event.currentTarget
     const title = element.dataset.expanderTitle
     const body = element.dataset.expanderBody
@@ -69,6 +74,8 @@ export default class extends Controller {
   }
 
   close() {
+    if (!this.hasModalTarget) return
+    
     this.modalTarget.classList.add("opacity-0", "pointer-events-none")
     document.body.style.overflow = "auto"
 
@@ -82,7 +89,7 @@ export default class extends Controller {
   }
 
   navigateToPhoto(index) {
-    if (index < 0 || index >= this.photos.length) return
+    if (!this.hasContentTarget || index < 0 || index >= this.photos.length) return
 
     const photo = this.photos[index]
     const imageUrl = photo.dataset.expanderImage
