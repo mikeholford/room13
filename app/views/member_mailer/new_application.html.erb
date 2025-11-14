@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Membership Application</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow: hidden;">
+          <!-- Header -->
+          <tr>
+            <td style="background-color: #000000; padding: 30px; text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600;">Room 13</h1>
+              <p style="margin: 10px 0 0 0; color: #ffffff; font-size: 14px; opacity: 0.9;">New Membership Application</p>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 40px 30px;">
+              <!-- Application Notice -->
+              <div style="background-color: #f8f9fa; border-left: 4px solid #000000; padding: 15px; margin-bottom: 30px;">
+                <p style="margin: 0; font-size: 14px; color: #495057;">
+                  A new membership application has been received<% if @member.created_at.present? %> on <%= @member.created_at.strftime("%B %d, %Y at %I:%M %p") %><% end %>
+                </p>
+              </div>
+
+              <!-- Applicant Information -->
+              <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #212529;">Applicant Information</h2>
+              
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 30px;">
+                <tr>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef;">
+                    <strong style="color: #495057; font-size: 14px;">Name:</strong>
+                  </td>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef; text-align: right;">
+                    <span style="color: #212529; font-size: 14px;">
+                      <%= [@member.title, @member.first_name, @member.last_name].compact.join(" ") %>
+                    </span>
+                  </td>
+                </tr>
+                
+                <% if @member.nickname.present? %>
+                <tr>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef;">
+                    <strong style="color: #495057; font-size: 14px;">Nickname:</strong>
+                  </td>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef; text-align: right;">
+                    <span style="color: #212529; font-size: 14px;"><%= @member.nickname %></span>
+                  </td>
+                </tr>
+                <% end %>
+                
+                <tr>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef;">
+                    <strong style="color: #495057; font-size: 14px;">Email:</strong>
+                  </td>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef; text-align: right;">
+                    <a href="mailto:<%= @member.email %>" style="color: #007bff; font-size: 14px; text-decoration: none;">
+                      <%= @member.email %>
+                    </a>
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef;">
+                    <strong style="color: #495057; font-size: 14px;">Membership Type:</strong>
+                  </td>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef; text-align: right;">
+                    <span style="display: inline-block; background-color: <%= @member.founding? ? '#ffc107' : '#28a745' %>; color: #ffffff; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
+                      <%= @member.membership_type.titleize %>
+                    </span>
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef;">
+                    <strong style="color: #495057; font-size: 14px;">Status:</strong>
+                  </td>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef; text-align: right;">
+                    <span style="display: inline-block; background-color: #6c757d; color: #ffffff; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
+                      <%= @member.status.titleize %>
+                    </span>
+                  </td>
+                </tr>
+                
+                <% if @member.occupation.present? %>
+                <tr>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef;">
+                    <strong style="color: #495057; font-size: 14px;">Occupation:</strong>
+                  </td>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef; text-align: right;">
+                    <span style="color: #212529; font-size: 14px;"><%= @member.occupation %></span>
+                  </td>
+                </tr>
+                <% end %>
+              </table>
+
+              <!-- Address Information -->
+              <% if @member.address_line_1.present? || @member.city.present? %>
+              <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #212529;">Address</h2>
+              
+              <div style="background-color: #f8f9fa; padding: 20px; border-radius: 6px; margin-bottom: 30px;">
+                <% if @member.address_line_1.present? %>
+                  <p style="margin: 0 0 8px 0; color: #212529; font-size: 14px;"><%= @member.address_line_1 %></p>
+                <% end %>
+                <% if @member.address_line_2.present? %>
+                  <p style="margin: 0 0 8px 0; color: #212529; font-size: 14px;"><%= @member.address_line_2 %></p>
+                <% end %>
+                <% if @member.city.present? || @member.state.present? || @member.postal_code.present? %>
+                  <p style="margin: 0 0 8px 0; color: #212529; font-size: 14px;">
+                    <%= [@member.city, @member.state, @member.postal_code].compact.join(", ") %>
+                  </p>
+                <% end %>
+                <% if @member.country.present? %>
+                  <p style="margin: 0; color: #212529; font-size: 14px;"><%= @member.country %></p>
+                <% end %>
+              </div>
+              <% end %>
+
+              <!-- Additional Responses -->
+              <% if @member.additional_responses.present? && @member.additional_responses.any? %>
+              <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #212529;">Additional Responses</h2>
+              
+              <div style="background-color: #f8f9fa; padding: 20px; border-radius: 6px; margin-bottom: 30px;">
+                <% @member.additional_responses.each do |key, value| %>
+                  <div style="margin-bottom: 15px;">
+                    <strong style="color: #495057; font-size: 13px; display: block; margin-bottom: 5px;">
+                      <%= key.to_s.titleize %>:
+                    </strong>
+                    <p style="margin: 0; color: #212529; font-size: 14px; line-height: 1.6;">
+                      <%= value %>
+                    </p>
+                  </div>
+                <% end %>
+              </div>
+              <% end %>
+
+              <!-- Footer Note -->
+              <div style="border-top: 1px solid #e9ecef; padding-top: 20px; margin-top: 30px;">
+                <p style="margin: 0; color: #6c757d; font-size: 13px; line-height: 1.6;">
+                  This is an automated notification. Please review the application and take appropriate action.
+                </p>
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #f8f9fa; padding: 20px 30px; text-align: center; border-top: 1px solid #e9ecef;">
+              <p style="margin: 0; color: #6c757d; font-size: 12px;">
+                © <%= Time.current.year %> Room 13. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+

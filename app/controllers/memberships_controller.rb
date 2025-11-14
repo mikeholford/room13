@@ -9,6 +9,7 @@ class MembershipsController < ApplicationController
     @member = Member.new(member_params)
     
     if @member.save
+      MemberMailer.new_application(@member).deliver_later
       redirect_to membership_thank_you_path, notice: "Application submitted successfully!"
     else
       render :apply, status: :unprocessable_entity
@@ -23,9 +24,11 @@ class MembershipsController < ApplicationController
   def member_params
     params.require(:member).permit(
       :first_name, 
-      :last_name, 
+      :last_name,
+      :title,
       :nickname, 
       :email,
+      :membership_type,
       :address_line_1,
       :address_line_2,
       :city,

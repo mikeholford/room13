@@ -3,10 +3,14 @@ class Member < ApplicationRecord
   enum :status, {
     pending: 0,
     approved: 1,
-    rejected: 2,
-    payment_pending: 3,
-    active: 4
+    active: 2,
+    rejected: 3,
   }, default: :pending
+
+  enum :membership_type, {
+    standard: 0,
+    founding: 1,
+  }, default: :standard
 
   # Validations
   validates :first_name, presence: true
@@ -24,4 +28,5 @@ class Member < ApplicationRecord
     self.email = email.to_s.downcase.strip
   end
 end
+
 
