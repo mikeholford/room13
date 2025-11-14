@@ -9,7 +9,7 @@ class MembershipsController < ApplicationController
     @member = Member.new(member_params)
     
     if @member.save
-      MemberMailer.new_application(@member).deliver_later
+      MemberMailer.new_application(@member).deliver_now
       redirect_to membership_thank_you_path, notice: "Application submitted successfully!"
     else
       render :apply, status: :unprocessable_entity
