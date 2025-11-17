@@ -65,6 +65,19 @@
                   </td>
                 </tr>
                 
+                <% if @member.phone_number.present? %>
+                <tr>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef;">
+                    <strong style="color: #495057; font-size: 14px;">Phone Number:</strong>
+                  </td>
+                  <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef; text-align: right;">
+                    <a href="tel:<%= @member.phone_number %>" style="color: #007bff; font-size: 14px; text-decoration: none;">
+                      <%= @member.phone_number %>
+                    </a>
+                  </td>
+                </tr>
+                <% end %>
+                
                 <tr>
                   <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef;">
                     <strong style="color: #495057; font-size: 14px;">Membership Type:</strong>

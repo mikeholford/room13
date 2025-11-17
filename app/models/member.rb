@@ -18,6 +18,7 @@ class Member < ApplicationRecord
   validates :email, presence: true, 
                     format: { with: URI::MailTo::EMAIL_REGEXP },
                     uniqueness: { case_sensitive: false }
+  validates :phone_number, presence: true
 
   # Normalize email before validation
   before_validation :normalize_email

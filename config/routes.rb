@@ -17,6 +17,10 @@ Rails.application.routes.draw do
   get "/membership/apply" => "memberships#apply", as: :membership_apply
   post "/membership/apply" => "memberships#create"
   get "/membership/thank-you" => "memberships#thank_you", as: :membership_thank_you
+  
+  # Stripe checkout redirects
+  get "/membership/checkout/standard" => redirect("https://buy.stripe.com/bJe6oIcNIdUnd6z0w6gIo00")
+  get "/membership/checkout/founding" => redirect("https://buy.stripe.com/8x2dRaeVQ2bFd6z3IigIo01")
 
   # Event notes (Missed Connections)
   get "/:event_slug/" => "notes#index", as: :event_notes

@@ -27,6 +27,15 @@ export default class extends Controller {
       }
     }
 
+    // Phone validation
+    if (field.type === 'tel' && field.value.trim()) {
+      const phoneRegex = /^[\d\s\-\+\(\)]+$/
+      if (!phoneRegex.test(field.value.trim())) {
+        this.showError(field, errorElement, 'Please enter a valid phone number')
+        return false
+      }
+    }
+
     return true
   }
 
@@ -51,6 +60,15 @@ export default class extends Controller {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         if (!emailRegex.test(field.value.trim())) {
           this.showError(field, errorElement, 'Please enter a valid email address')
+          hasErrors = true
+        }
+      }
+
+      // Phone validation
+      if (field.type === 'tel' && field.value.trim()) {
+        const phoneRegex = /^[\d\s\-\+\(\)]+$/
+        if (!phoneRegex.test(field.value.trim())) {
+          this.showError(field, errorElement, 'Please enter a valid phone number')
           hasErrors = true
         }
       }
