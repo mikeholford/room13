@@ -47,7 +47,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_152329) do
   end
 
   create_table "notes", force: :cascade do |t|
-    t.integer "event_id", null: false
+    t.bigint "event_id", null: false
     t.string "title"
     t.text "body"
     t.datetime "created_at", null: false

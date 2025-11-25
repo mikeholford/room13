@@ -1,7 +1,7 @@
 <div class="h-screen bg-[#f8f5f0] relative overflow-hidden" data-controller="parallax">
   
   
-  <%= render 'parralax_bg' %>
+  <%#= render 'parralax_bg' %>
   
   <div class="absolute inset-0 flex flex-col items-center justify-center px-8">
     <div class="max-w-5xl mx-auto text-center opacity-0 translate-y-5 transition-all duration-1000" data-parallax-target="text">
@@ -63,15 +63,36 @@
         </div>
         <div class="px-8 pt-8 pb-12 flex flex-col flex-grow">
           <div class="text-center flex flex-col flex-grow">
-            <h3 class="text-3xl font-light mb-2 font-austin text-gray-900 tracking-widest">MIAMI BEACH</h3>
+            <h3 class="text-3xl font-light mb-2 font-austin text-gray-900 tracking-widest">MIAMI CRUISE</h3>
             <div class="w-16 h-px bg-gray-300 mx-auto mb-4"></div>
             <p class="text-gray-600 text-sm tracking-[0.2em] uppercase font-montserrat mb-2">A sunset cruise</p>
             <p class="text-gray-500 text-xs md:text-sm mb-4 max-w-sm mx-auto py-2">
               Welcome aboard! Step back in time and join us for an elegant sunset cruise through the Intracoastal Waterway of Miami and Biscayne Bay. Departure from Miami Beach Marina.
             </p>
             <div class="mt-auto">
+              <a href="https://room13.artsvp.com/2707f5/link/register" target="_blank" class="inline-block bg-black text-white px-8 py-3 text-xs md:text-sm tracking-[0.2em] uppercase font-montserrat">
+                Register Interest
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
 
-              <a href="https://room13.artsvp.com/2707f5?link=register" class="inline-block bg-black text-white px-8 py-3 text-xs md:text-sm tracking-[0.2em] uppercase font-montserrat">
+      <!-- Miami Event Card -->
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
+        <div class="aspect-[4/3] relative overflow-hidden">
+          <%= image_tag "events/miami2.png", class: "w-full h-full object-cover hover:scale-105 transition-transform duration-1000" %>
+        </div>
+        <div class="px-8 pt-8 pb-12 flex flex-col flex-grow">
+          <div class="text-center flex flex-col flex-grow">
+            <h3 class="text-3xl font-light mb-2 font-austin text-gray-900 tracking-widest">MIAMI DRINKS</h3>
+            <div class="w-16 h-px bg-gray-300 mx-auto mb-4"></div>
+            <p class="text-gray-600 text-sm tracking-[0.2em] uppercase font-montserrat mb-2">A night to remember</p>
+            <p class="text-gray-500 text-xs md:text-sm mb-4 max-w-sm mx-auto py-2">
+              Join us at Miami Beach's favorite watering hole, hidden gem, a place where time stands still. Mingle with the locals, kick one back to reward yourself for a year well done and make new friends and plans for the days ahead!
+            </p>
+            <div class="mt-auto">
+              <a href="https://room13.artsvp.com/26d278/link/drinks" target="_blank" class="inline-block bg-black text-white px-8 py-3 text-xs md:text-sm tracking-[0.2em] uppercase font-montserrat">
                 Register Interest
               </a>
             </div>
@@ -155,7 +176,7 @@
       Options are restricted and released periodically. <br class="hidden md:block"> Referrals by existing members are prioritised.
     </p>
     <a href="/membership" class="inline-block bg-white text-black px-12 py-4 text-sm tracking-[0.3em] uppercase font-montserrat hover:bg-gray-200 transition-colors duration-300">
-      ENQUIRE NOW
+      APPLY NOW
     </a>
 
   </div>
