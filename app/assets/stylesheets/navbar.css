@@ -1,0 +1,36 @@
+/* Hamburger menu animations */
+
+/* Hamburger button animation to X */
+[data-menu-target="hamburger"].open .hamburger-line:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+[data-menu-target="hamburger"].open .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+[data-menu-target="hamburger"].open .hamburger-line:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* When menu is open, make hamburger white */
+[data-menu-target="hamburger"].open .hamburger-line {
+  background-color: white !important;
+}
+
+/* Fade in up animation for menu items */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+

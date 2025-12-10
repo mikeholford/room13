@@ -19,6 +19,18 @@ sample_notes:
     - title: "What a night!"
       body: "All those oysters 🦪🦪🦪 Sassy recent NY to Paris transplant… market date one of these days? Ping me!! My phone didn't save your number, I hope you did better."
       category: "Random Kindness"
+  miami:
+    - title: "Where are you?"
+      body: "Palms Springs decorator! Need your insta deets please! Convo was rudely interrupted by stunning sunset ;) kindly contact Irene ❤️"
+      category: "Lost & Found"
+
+    - title: "Got my number wrong"
+      body: "We were vibing over what song to choose. Gave you my digits but possibly messed that up after one too many shots… trying here?"
+      category: "Jukebox encounter"
+
+    - title: "Style icon"
+      body: "Whoever rocked the neon sunglasses at the after party: you win best look. Teach me your style secrets next time?"
+      category: "Fashion moment"
   default:
     - title: "SKETCHBOOK DOODLES"
       body: "We both ended up comparing the doodles in our 'Guide to the Manor' sketchbook, laughing over shared themes. Your creative take inspired me to try something new. Hope to catch you at the next event!"

@@ -48,7 +48,8 @@
     
   </head>
 
-  <body class="bg-[#f8f5f0]">
+  <body class="bg-[#f8f5f0]" data-controller="menu">
+    <%= render 'layouts/shared/navbar' %>
     <%= yield %>
     <%= render 'layouts/shared/footer' %>
   </body>
