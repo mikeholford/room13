@@ -4,11 +4,18 @@ class PhotoS3Service
 
   def initialize(event_slug)
     @event_slug = event_slug
-    @s3_client = Aws::S3::Client.new(
+    
+    # S3 client configuration
+    s3_config = {
       access_key_id: Rails.application.credentials.dig(:aws, :access_key_id),
       secret_access_key: Rails.application.credentials.dig(:aws, :secret_access_key),
       region: Rails.application.credentials.dig(:aws, :region)
-    )
+    }
+    
+    # Disable SSL verification in development to avoid certificate issues
+    s3_config[:ssl_verify_peer] = false if Rails.env.development?
+    
+    @s3_client = Aws::S3::Client.new(s3_config)
     @bucket_name = Rails.application.credentials.dig(:aws, :bucket)
   end
 

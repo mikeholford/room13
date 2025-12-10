@@ -156,10 +156,10 @@
 </div>
 
 <!-- Masonry.js Library -->
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js" nonce="<%= content_security_policy_nonce %>"></script>
 
 <!-- Initialize Masonry with lazy loading support -->
-<script>
+<script nonce="<%= content_security_policy_nonce %>">
   document.addEventListener('DOMContentLoaded', function() {
     var grid = document.querySelector('#photo-masonry');
 
