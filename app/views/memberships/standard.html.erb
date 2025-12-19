@@ -1,0 +1,100 @@
+<section class="py-20 bg-[#f8f5f0]" data-controller="apply-modal">
+  <div class="max-w-6xl mx-auto px-8">
+    
+    <a href="/membership">
+      <span class="inline-flex items-center text-gray-700 hover:text-gray-900 font-montserrat text-sm uppercase">
+        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Back to Membership
+      </span>
+    </a>
+
+    <div class="text-center mb-16 mt-8">
+      <h2 class="text-4xl md:text-5xl tracking-[0.1em] font-light mb-4 font-austin text-gray-900">
+        STANDARD MEMBERSHIP
+      </h2>
+      <p class="text-gray-600 text-sm tracking-[0.2em] uppercase font-montserrat max-w-2xl mx-auto">
+        Your gateway to the global art world
+      </p>
+    </div>
+
+    <div class="mb-4">
+      <div class="w-full mb-6 md:float-right md:ml-8 md:mb-4 md:max-w-sm">
+        <%= image_tag "landing/5.jpeg", alt: "Room 13 event", class: "w-full h-auto border-5 border-white shadow-xl" %>
+      </div>
+      
+      <p class="text-gray-600 text-lg tracking-[0.1em] font-montserrat mb-6">
+        Becoming a Member of ROOM 13 means stepping into a world where art is not just observed, but lived. Our members don't simply attend events—they become part of a carefully curated community that spans continents and cultures, united by a shared passion for artistic excellence.
+      </p>
+
+      <p class="text-gray-600 text-lg tracking-[0.1em] font-montserrat mb-6">
+        From intimate gallery openings in London to vibrant art fairs in Miami, from exclusive previews in Basel to cultural soirées in Hong Kong—as a Member, you'll find doors opening that were previously invisible. Each ROOM 13 gathering is designed to foster genuine connections, where conversations flow naturally between collectors, artists, curators, and enthusiasts who share your sensibility.
+      </p>
+
+      <p class="text-gray-600 text-lg tracking-[0.1em] font-montserrat mb-6 font-bold">
+        "The art world can feel like a maze of closed doors and secret handshakes. ROOM 13 changes that—it's a key that fits every lock worth opening."
+      </p>
+
+      <p class="text-gray-600 text-lg tracking-[0.1em] font-montserrat mb-6">
+        Our partnership network extends across more than 50 of the world's most prestigious art fairs and cultural events. As a member, you'll enjoy priority access, exclusive previews, and the confidence of knowing you're always among kindred spirits.
+      </p>
+
+      <div class="clear-both"></div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="bg-white p-8 shadow-sm mb-12">
+      <h3 class="text-2xl font-austin tracking-[0.1em] text-gray-900 mb-6 border-b border-gray-200 pb-3">
+        MEMBERSHIP BENEFITS
+      </h3>
+      
+      <ul class="space-y-4">
+        <li class="flex items-start">
+          <svg class="w-5 h-5 text-gray-700 mr-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+          <div>
+            <span class="text-gray-900 font-montserrat text-sm tracking-[0.1em] font-medium block">Guaranteed Access to All ROOM 13 Events</span>
+            <span class="text-gray-500 font-montserrat text-xs tracking-[0.05em]">Including a +1 guest at every event</span>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <svg class="w-5 h-5 text-gray-700 mr-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+          <div>
+            <span class="text-gray-900 font-montserrat text-sm tracking-[0.1em] font-medium block">Global Partner Network</span>
+            <span class="text-gray-500 font-montserrat text-xs tracking-[0.05em]">Access to 50+ partner fairs & events across the world</span>
+          </div>
+        </li>
+        <li class="flex items-start">
+          <svg class="w-5 h-5 text-gray-700 mr-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+          </svg>
+          <div>
+            <span class="text-gray-900 font-montserrat text-sm tracking-[0.1em] font-medium block">A Global Community</span>
+            <span class="text-gray-500 font-montserrat text-xs tracking-[0.05em]">Connect with like-minded art enthusiasts, collectors, and cultural leaders worldwide</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Apply Section -->
+    <div class="text-center">
+      <button type="button" 
+              data-action="click->apply-modal#open" 
+              data-apply-modal-type-param="standard"
+              class="inline-block px-16 py-4 bg-gray-900 text-white tracking-[0.2em] uppercase font-montserrat text-sm hover:bg-gray-800 transition-colors duration-300 cursor-pointer">
+        Apply Now
+      </button>
+      
+      <p class="text-gray-500 text-sm tracking-[0.15em] font-montserrat mt-8">
+        For enquiries, please <a href="mailto:irene@room13.art" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 underline">talk to Irene</a>
+      </p>
+    </div>
+
+  </div>
+
+  <%= render 'memberships/apply_modal', default_membership: 'standard' %>
+</section>

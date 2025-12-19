@@ -11,11 +11,15 @@ Rails.application.routes.draw do
 
   match "/about" => "statics#about", via: :all, as: :about
   match "/login" => "statics#login", via: :all, as: :login
+  match "/events" => "statics#events", via: :all, as: :events
 
   # Membership routes
   get "/membership" => "memberships#index", as: :membership
+  get "/membership/standard" => "memberships#standard", as: :membership_standard
+  get "/membership/founding" => "memberships#founding", as: :membership_founding
   get "/membership/apply" => "memberships#apply", as: :membership_apply
   post "/membership/apply" => "memberships#create"
+  post "/membership/enquiry" => "memberships#create_enquiry", as: :membership_enquiry
   get "/membership/thank-you" => "memberships#thank_you", as: :membership_thank_you
   
   # Stripe checkout redirects

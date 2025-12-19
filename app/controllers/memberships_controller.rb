@@ -2,6 +2,12 @@ class MembershipsController < ApplicationController
   def index
   end
 
+  def standard
+  end
+
+  def founding
+  end
+
   def apply
   end
 
@@ -17,6 +23,21 @@ class MembershipsController < ApplicationController
   end
 
   def thank_you
+  end
+
+  def create_enquiry
+    @enquiry = Enquiry.new(enquiry_params)
+    
+    if @enquiry.save
+      redirect_to membership_apply_path(
+        membership_type: @enquiry.membership_type,
+        first_name: @enquiry.first_name,
+        last_name: @enquiry.last_name,
+        email: @enquiry.email
+      )
+    else
+      redirect_back fallback_location: membership_path, alert: "Please fill in all fields correctly."
+    end
   end
 
   private
@@ -39,5 +60,9 @@ class MembershipsController < ApplicationController
       :occupation,
       additional_responses: {}
     )
+  end
+
+  def enquiry_params
+    params.permit(:first_name, :last_name, :email, :membership_type)
   end
 end

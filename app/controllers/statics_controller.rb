@@ -7,4 +7,7 @@ class StaticsController < ApplicationController
 
   def login
   end
+
+  def events
+  end
 end

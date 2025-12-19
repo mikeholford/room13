@@ -101,6 +101,7 @@
             <%= f.text_field :first_name, 
                 required: true,
                 placeholder: "John",
+                value: params[:first_name],
                 data: { 
                   membership_form_target: "input", 
                   form_validation_target: "field",
@@ -118,6 +119,7 @@
             <%= f.text_field :last_name, 
                 required: true,
                 placeholder: "Doe",
+                value: params[:last_name],
                 data: { 
                   membership_form_target: "input", 
                   form_validation_target: "field",
@@ -154,6 +156,7 @@
             <%= f.email_field :email, 
                 required: true,
                 placeholder: "john@example.com",
+                value: params[:email],
                 data: { 
                   membership_form_target: "input", 
                   form_validation_target: "field",
