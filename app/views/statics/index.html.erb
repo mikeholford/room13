@@ -15,14 +15,14 @@
       </p>
 
       <p class="mt-6 text-gray-600 text-xs md:text-sm tracking-[0.3em] uppercase font-montserrat">
-        <a class="underline" href="/login">LOGIN</a> / <a class="underline" href="/membership">APPLY</a> 
+        <a class="underline" href="/about">ABOUT</a> / <a class="underline" href="/membership">MEMBERSHIP</a> 
       </p>
     </div>
   </div>
 </div>
 
 <!-- Black section for testing parallax effect -->
-<div class="h-screen bg-black relative">
+<div class="h-screen min-h-[500px] bg-black relative">
   <div class="flex flex-col items-center justify-center h-full">
     
     <div class="my-24 text-white/90 mx-auto">
@@ -34,9 +34,6 @@
           <div class="opacity-0 transition-all duration-2000 text-lg md:text-xl text-white/50 tracking-[0.2em] font-montserrat" data-controller="on-scroll" data-on-scroll-add-value="opacity-100" data-on-scroll-remove-value="opacity-0" data-on-scroll-delay-value="600" data-on-scroll-repeat-value-value="false">"to instruct and to delight", <br class="block md:hidden"> Horace Ars Poetica verse 333</div>
       </h2>
 
-      <p class="px-10 md:px-0 text-white/70 max-w-5xl text-md md:text-xl mx-auto tracking-[0.2em] font-montserrat pt-12 opacity-0 transition-all text-center duration-3000" data-controller="on-scroll" data-on-scroll-add-value="opacity-100" data-on-scroll-remove-value="opacity-0" data-on-scroll-delay-value="400" data-on-scroll-repeat-value="false">
-        In this crazy world a safe haven, a group of like-minded spirits, a bunch of trusted companions and a really bloody good party is sometimes all it takes.
-      </p>
     </div>
 
   </div>
@@ -71,9 +68,9 @@
               Immerse yourself in the magic of Marrakech during 1-54 in February. Join us for an enchanting evening in the heart of the Red City, where ancient traditions meet contemporary art and culture.
             </p>
             <div class="mt-auto">
-              <button disabled class="inline-block bg-gray-400 text-white px-8 py-3 text-xs tracking-[0.3em] uppercase font-montserrat cursor-not-allowed opacity-60">
-                COMING SOON
-              </button>
+              <a href="https://room13.artsvp.com/9cc961/link/request" target="_blank" rel="noopener" class="inline-block bg-gray-900 hover:bg-gray-800 text-white px-8 py-3 text-xs tracking-[0.3em] uppercase font-montserrat transition-colors duration-300">
+                Register Interest
+              </a>
             </div>
           </div>
         </div>
@@ -136,19 +133,34 @@
 </section>
 
 <!-- Membership CTA Section -->
-<section class="py-20 bg-black">
-  <div class="max-w-4xl mx-auto px-8 text-center">
-    <h2 class="text-4xl md:text-6xl font-light mb-4 font-austin text-white tracking-wider">
-      MEMBERSHIP
-    </h2>
+<section class="bg-black h-screen min-h-[500px]">
+  <div class="flex flex-col md:flex-row h-full">
+    <!-- Left side - Quote and CTA -->
+    <div class="w-full md:w-1/2 flex flex-col items-center justify-center px-8 md:px-16 py-16 md:py-20">
+      <div class="max-w-md text-center">
+        <h2 class="text-4xl md:text-5xl font-light mb-8 font-austin text-white tracking-wider">
+          MEMBERSHIP
+        </h2>
 
-    <p class="text-md md:text-xl text-white/70 mb-8 max-w-2xl mx-auto font-montserrat font-light">
-      Options are restricted and released periodically. <br class="hidden md:block"> Referrals by existing members are prioritised.
-    </p>
-    <a href="/membership" class="inline-block bg-white text-black px-12 py-4 text-sm tracking-[0.3em] uppercase font-montserrat hover:bg-gray-200 transition-colors duration-300">
-      APPLY NOW
-    </a>
+        <p class="text-2xl md:text-3xl lg:text-4xl font-light text-white/70 font-austin leading-relaxed mb-12">
+          "In this crazy world a safe haven, a group of like-minded spirits, a bunch of trusted companions and a really bloody good party is sometimes all it takes"
+        </p>
 
+        <a href="/membership" class="inline-block bg-white text-black px-12 py-5 text-sm tracking-[0.3em] uppercase font-montserrat font-bold hover:bg-gray-200 transition-colors duration-300 mb-6">
+          BECOME A MEMBER
+        </a>
+
+        <p class="text-white/50 text-xs tracking-[0.15em] font-montserrat font-light leading-relaxed">
+          Options are restricted and released periodically.<br>
+          Referrals by existing members are prioritised.
+        </p>
+      </div>
+    </div>
+
+    <!-- Right side - Image -->
+    <div class="w-full md:w-1/2 relative">
+      <%= image_tag "landing/5.jpeg", class: "w-full h-full object-cover", alt: "Room 13 member" %>
+    </div>
   </div>
 </section>
 
