@@ -2,7 +2,10 @@ class MembershipsController < ApplicationController
   def index
   end
 
-  def standard
+  def community
+  end
+
+  def premium
   end
 
   def founding

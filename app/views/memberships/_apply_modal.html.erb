@@ -9,7 +9,12 @@
           Begin Your Application
         </h3>
         <p class="text-gray-500 text-xs tracking-[0.1em] uppercase font-montserrat mt-1" data-apply-modal-target="membershipLabel">
-          <%= local_assigns[:default_membership] == 'founding' ? 'Founding Membership' : 'Standard Membership' %>
+          <%= case local_assigns[:default_membership]
+              when 'founding' then 'Founding Membership'
+              when 'premium' then 'Premium Membership'
+              when 'community' then 'Community Membership'
+              else 'Community Membership'
+              end %>
         </p>
       </div>
       <button type="button" data-action="click->apply-modal#close" class="text-gray-400 hover:text-gray-600 transition-colors">
@@ -20,7 +25,7 @@
     </div>
 
     <form data-apply-modal-target="form" data-action="submit->apply-modal#submit">
-      <input type="hidden" name="membership_type" data-apply-modal-target="membershipType" value="<%= local_assigns[:default_membership] || 'standard' %>">
+      <input type="hidden" name="membership_type" data-apply-modal-target="membershipType" value="<%= local_assigns[:default_membership] || 'community' %>">
       
       <div class="grid grid-cols-2 gap-4 mb-4">
         <div>

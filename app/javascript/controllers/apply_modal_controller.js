@@ -28,11 +28,18 @@ export default class extends Controller {
 
   open(event) {
     // Get membership type from the button's data attribute
-    const membershipType = event.params.type || "standard"
-    
+    const membershipType = event.params.type || "community"
+
+    // Map membership types to display labels
+    const membershipLabels = {
+      community: "Community Membership",
+      premium: "Premium Membership",
+      founding: "Founding Membership"
+    }
+
     // Update the hidden field and label
     this.membershipTypeTarget.value = membershipType
-    this.membershipLabelTarget.textContent = membershipType === "founding" ? "Founding Membership" : "Standard Membership"
+    this.membershipLabelTarget.textContent = membershipLabels[membershipType] || "Community Membership"
     
     // Clear the form
     this.firstNameTarget.value = ""

@@ -8,9 +8,10 @@ class Member < ApplicationRecord
   }, default: :pending
 
   enum :membership_type, {
-    standard: 0,
+    premium: 0,
     founding: 1,
-  }, default: :standard
+    community: 2,
+  }, default: :community
 
   # Validations
   validates :first_name, presence: true

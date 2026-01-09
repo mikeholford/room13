@@ -1,15 +1,15 @@
 <%
-  set_meta_tags title: "Standard Membership",
-                description: "Become a Member of ROOM 13 and unlock access to the global art world, exclusive events, and a community of like-minded art lovers.",
-                keywords: "standard membership, art world, members club, events, room 13, join, application",
+  set_meta_tags title: "Premium Membership",
+                description: "Become a Premium Member of ROOM 13 and unlock guaranteed access to the global art world, exclusive events, and a community of like-minded art lovers.",
+                keywords: "premium membership, art world, members club, events, room 13, join, application",
                 og: {
-                  title: "Standard Membership",
-                  description: "Become a Member of ROOM 13 and unlock access to the global art world, exclusive events, and a community of like-minded art lovers.",
+                  title: "Premium Membership",
+                  description: "Become a Premium Member of ROOM 13 and unlock guaranteed access to the global art world, exclusive events, and a community of like-minded art lovers.",
                   image: image_url("landing/5.jpeg")
                 },
                 twitter: {
-                  title: "Standard Membership",
-                  description: "Become a Member of ROOM 13 and unlock access to the global art world, exclusive events, and a community of like-minded art lovers.",
+                  title: "Premium Membership",
+                  description: "Become a Premium Member of ROOM 13 and unlock guaranteed access to the global art world, exclusive events, and a community of like-minded art lovers.",
                   image: image_url("landing/5.jpeg")
                 }
 %>
@@ -30,10 +30,10 @@
 
     <div class="text-center mb-16 mt-8">
       <h2 class="text-4xl md:text-5xl tracking-[0.1em] font-light mb-4 font-austin text-gray-900">
-        STANDARD MEMBERSHIP
+        PREMIUM MEMBERSHIP
       </h2>
       <p class="text-gray-600 text-sm tracking-[0.2em] uppercase font-montserrat max-w-2xl mx-auto">
-        Your gateway to the global art world
+        Guaranteed access to the global art world
       </p>
     </div>
 
@@ -43,7 +43,7 @@
       </div>
       
       <p class="text-gray-600 text-lg tracking-[0.1em] font-montserrat mb-6">
-        Becoming a Member of ROOM 13 means stepping into a world where art is not just observed, but lived. Our members don't simply attend events—they become part of a carefully curated community that spans continents and cultures, united by a shared passion for artistic excellence.
+        Becoming a Premium Member of ROOM 13 means stepping into a world where art is not just observed, but lived. Our members don't simply attend events—they become part of a carefully curated community that spans continents and cultures, united by a shared passion for artistic excellence.
       </p>
 
       <p class="text-gray-600 text-lg tracking-[0.1em] font-montserrat mb-6">
@@ -100,13 +100,13 @@
 
     <!-- Apply Section -->
     <div class="text-center">
-      <button type="button" 
-              data-action="click->apply-modal#open" 
-              data-apply-modal-type-param="standard"
+      <button type="button"
+              data-action="click->apply-modal#open"
+              data-apply-modal-type-param="premium"
               class="inline-block px-16 py-4 bg-gray-900 text-white tracking-[0.2em] uppercase font-montserrat text-sm hover:bg-gray-800 transition-colors duration-300 cursor-pointer">
         Apply Now
       </button>
-      
+
       <p class="text-gray-500 text-sm tracking-[0.15em] font-montserrat mt-8">
         For enquiries, please <a href="mailto:irene@room13.art" class="text-gray-600 hover:text-gray-900 transition-colors duration-300 underline">talk to Irene</a>
       </p>
@@ -114,5 +114,5 @@
 
   </div>
 
-  <%= render 'memberships/apply_modal', default_membership: 'standard' %>
+  <%= render 'memberships/apply_modal', default_membership: 'premium' %>
 </section>

@@ -83,7 +83,15 @@
                     <strong style="color: #495057; font-size: 14px;">Membership Type:</strong>
                   </td>
                   <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef; text-align: right;">
-                    <span style="display: inline-block; background-color: <%= @member.founding? ? '#ffc107' : '#28a745' %>; color: #ffffff; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
+                    <%
+                      membership_color = case @member.membership_type
+                                         when "founding" then "#ffc107"
+                                         when "premium" then "#28a745"
+                                         when "community" then "#6c757d"
+                                         else "#6c757d"
+                                         end
+                    %>
+                    <span style="display: inline-block; background-color: <%= membership_color %>; color: #ffffff; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; text-transform: uppercase;">
                       <%= @member.membership_type.titleize %>
                     </span>
                   </td>
@@ -134,20 +142,86 @@
               </div>
               <% end %>
 
-              <!-- Additional Responses -->
-              <% if @member.additional_responses.present? && @member.additional_responses.any? %>
-              <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #212529;">Additional Responses</h2>
-              
+              <!-- Why Room 13 -->
+              <% if @member.additional_responses&.dig("membership_goals").present? %>
+              <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #212529;">Why Room 13?</h2>
+
               <div style="background-color: #f8f9fa; padding: 20px; border-radius: 6px; margin-bottom: 30px;">
-                <% @member.additional_responses.each do |key, value| %>
+                <p style="margin: 0; color: #212529; font-size: 14px; line-height: 1.6; white-space: pre-wrap;"><%= @member.additional_responses["membership_goals"] %></p>
+              </div>
+              <% end %>
+
+              <!-- How Did You Hear About Us -->
+              <% if @member.additional_responses&.dig("referral_source").present? %>
+              <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #212529;">How Did You Hear About Us?</h2>
+
+              <div style="background-color: #f8f9fa; padding: 20px; border-radius: 6px; margin-bottom: 30px;">
+                <%
+                  referral_labels = {
+                    "friend_family" => "Friend or Family",
+                    "social_media" => "Social Media",
+                    "press" => "Press or Article",
+                    "art_fair" => "Art Fair or Event",
+                    "gallery" => "Gallery",
+                    "other" => "Other"
+                  }
+                  referral_value = @member.additional_responses["referral_source"]
+                %>
+                <p style="margin: 0; color: #212529; font-size: 14px; line-height: 1.6;">
+                  <%= referral_labels[referral_value] || referral_value.to_s.titleize %>
+                </p>
+                <% if referral_value == "other" && @member.additional_responses["referral_source_other"].present? %>
+                  <p style="margin: 10px 0 0 0; color: #495057; font-size: 14px; line-height: 1.6; font-style: italic;">
+                    "<%= @member.additional_responses["referral_source_other"] %>"
+                  </p>
+                <% end %>
+              </div>
+              <% end %>
+
+              <!-- VIP Status -->
+              <% if @member.additional_responses&.dig("vip_status").present? %>
+              <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #212529;">VIP Status</h2>
+
+              <div style="background-color: #f8f9fa; padding: 20px; border-radius: 6px; margin-bottom: 30px;">
+                <p style="margin: 0; color: #212529; font-size: 14px; line-height: 1.6; white-space: pre-wrap;"><%= @member.additional_responses["vip_status"] %></p>
+              </div>
+              <% end %>
+
+              <!-- Art Cities -->
+              <% if @member.additional_responses&.dig("art_events").present? && @member.additional_responses["art_events"].any? %>
+              <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #212529;">Art Cities Frequently Attended</h2>
+
+              <div style="background-color: #f8f9fa; padding: 20px; border-radius: 6px; margin-bottom: 30px;">
+                <p style="margin: 0; color: #212529; font-size: 14px; line-height: 1.6;">
+                  <%= @member.additional_responses["art_events"].map { |c| c.to_s.titleize.gsub("_", " ") }.join(", ") %>
+                </p>
+              </div>
+              <% end %>
+
+              <!-- Proust Questions -->
+              <% if @member.additional_responses&.dig("proust_questions").present? %>
+              <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #212529;">Personal Questions</h2>
+
+              <div style="background-color: #f8f9fa; padding: 20px; border-radius: 6px; margin-bottom: 30px;">
+                <%
+                  proust_labels = {
+                    "value_in_friends" => "What do you most value in your friends?",
+                    "treasured_possession" => "What is your most treasured possession?",
+                    "happiest_moment" => "When and where were you happiest?",
+                    "motto" => "What is your motto?"
+                  }
+                %>
+                <% @member.additional_responses["proust_questions"].each do |key, value| %>
+                  <% if value.present? %>
                   <div style="margin-bottom: 15px;">
                     <strong style="color: #495057; font-size: 13px; display: block; margin-bottom: 5px;">
-                      <%= key.to_s.titleize %>:
+                      <%= proust_labels[key] || key.to_s.titleize %>
                     </strong>
                     <p style="margin: 0; color: #212529; font-size: 14px; line-height: 1.6;">
                       <%= value %>
                     </p>
                   </div>
+                  <% end %>
                 <% end %>
               </div>
               <% end %>

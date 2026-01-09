@@ -87,7 +87,7 @@
     <%= form_with model: @member || Member.new, url: membership_apply_path, method: :post, data: { controller: "membership-form form-validation", membership_form_storage_key_value: "room13_membership_application" }, class: "space-y-12", novalidate: true do |f| %>
       
       <!-- Hidden field for membership type -->
-      <%= f.hidden_field :membership_type, value: params[:membership_type] || 'standard' %>
+      <%= f.hidden_field :membership_type, value: params[:membership_type] || 'community' %>
       
       <!-- Personal Details Section -->
       <div class="bg-white p-8 shadow-sm">
@@ -543,6 +543,20 @@
               class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat resize-none" %>
       </div>
 
+      <!-- Why Join Room 13 Section -->
+      <div class="bg-white p-8 shadow-sm">
+        <h3 class="text-2xl tracking-[0.15em] font-light mb-3 font-austin text-gray-900 border-b border-gray-200 pb-3">
+          WHY ROOM 13?
+        </h3>
+        <label for="member_additional_responses_membership_goals" class="block text-sm tracking-[0.05em] font-montserrat text-gray-700 mb-2">
+          What would you like to get out of your membership?
+        </label>
+        <%= text_area_tag "member[additional_responses][membership_goals]", nil,
+              rows: 5,
+              data: { membership_form_target: "input", action: "input->membership-form#saveForm" },
+              class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat resize-none" %>
+      </div>
+
       <!-- Proust Questions Section -->
       <div class="bg-white p-8 shadow-sm">
         <h3 class="text-2xl tracking-[0.15em] font-light mb-6 font-austin text-gray-900 border-b border-gray-200 pb-3">
@@ -571,6 +585,45 @@
                   class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat resize-none" %>
             </div>
           <% end %>
+        </div>
+      </div>
+
+      <!-- How Did You Hear About Us Section -->
+      <div class="bg-white p-8 shadow-sm" data-controller="referral-source">
+        <h3 class="text-2xl tracking-[0.15em] font-light mb-3 font-austin text-gray-900 border-b border-gray-200 pb-3">
+          HOW DID YOU HEAR ABOUT US?
+        </h3>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-6">
+          <% referral_sources = [
+            ["Friend or Family", "friend_family"],
+            ["Social Media", "social_media"],
+            ["Press or Article", "press"],
+            ["Art Fair or Event", "art_fair"],
+            ["Gallery", "gallery"],
+            ["Other", "other"]
+          ] %>
+
+          <% referral_sources.each do |label, value| %>
+            <label class="flex items-center justify-center px-4 py-3 border border-gray-300 cursor-pointer transition-all duration-200 hover:border-gray-900 has-[:checked]:bg-gray-900 has-[:checked]:text-white has-[:checked]:border-gray-900">
+              <%= radio_button_tag "member[additional_responses][referral_source]", value, false,
+                  data: {
+                    membership_form_target: "input",
+                    action: "change->membership-form#saveForm change->referral-source#toggle",
+                    referral_source_target: "radio"
+                  },
+                  class: "sr-only" %>
+              <span class="text-sm tracking-[0.05em] font-montserrat"><%= label %></span>
+            </label>
+          <% end %>
+        </div>
+
+        <div class="mt-4 hidden" data-referral-source-target="otherField">
+          <%= label_tag "member_additional_responses_referral_source_other", "Please tell us more", class: "block text-sm tracking-[0.05em] font-montserrat text-gray-700 mb-2" %>
+          <%= text_field_tag "member[additional_responses][referral_source_other]", nil,
+              data: { membership_form_target: "input", action: "input->membership-form#saveForm" },
+              placeholder: "How did you hear about Room 13?",
+              class: "w-full px-4 py-3 border border-gray-300 focus:border-gray-900 focus:ring-1 focus:ring-gray-900 outline-none transition-colors font-montserrat" %>
         </div>
       </div>
 

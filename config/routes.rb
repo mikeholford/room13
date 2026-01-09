@@ -15,15 +15,19 @@ Rails.application.routes.draw do
 
   # Membership routes
   get "/membership" => "memberships#index", as: :membership
-  get "/membership/standard" => "memberships#standard", as: :membership_standard
+  get "/membership/community" => "memberships#community", as: :membership_community
+  get "/membership/premium" => "memberships#premium", as: :membership_premium
   get "/membership/founding" => "memberships#founding", as: :membership_founding
   get "/membership/apply" => "memberships#apply", as: :membership_apply
   post "/membership/apply" => "memberships#create"
   post "/membership/enquiry" => "memberships#create_enquiry", as: :membership_enquiry
   get "/membership/thank-you" => "memberships#thank_you", as: :membership_thank_you
-  
+
+  # Legacy redirect for old standard route
+  get "/membership/standard" => redirect("/membership/premium")
+
   # Stripe checkout redirects
-  get "/membership/checkout/standard" => redirect("https://buy.stripe.com/bJe6oIcNIdUnd6z0w6gIo00")
+  get "/membership/checkout/premium" => redirect("https://buy.stripe.com/bJe6oIcNIdUnd6z0w6gIo00")
   get "/membership/checkout/founding" => redirect("https://buy.stripe.com/8x2dRaeVQ2bFd6z3IigIo01")
 
   # Event notes (Missed Connections)
